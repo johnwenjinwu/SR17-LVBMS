@@ -32,16 +32,9 @@ char buffer3[4];
 char buffer4[4];
 
 
-// This function is used to check
+// This function is used to check//nihao
 void program_eeprom() {
 
-	//read data from 0x06 to 0x0a
-//	for(int i=0;i<5;i++){
-//		status = HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR,(uint16_t)(start_reg + i),I2C_MEMADD_SIZE_8BIT,&Read_buffer[i],1,100);
-//		if(status != HAL_OK){
-//			HAL_UART_Transmit(&huart1, (uint8_t*) ("I2C is Cooked"), 20, 100);
-//		}
-//	}
 	HAL_I2C_Mem_Read(&hi2c1,BMS_ADDR,0x06,I2C_MEMADD_SIZE_8BIT,&Read_buffer[0],1,100);
 	HAL_I2C_Mem_Read(&hi2c1,BMS_ADDR,0x07,I2C_MEMADD_SIZE_8BIT,&Read_buffer[1],1,100);
 	HAL_I2C_Mem_Read(&hi2c1,BMS_ADDR,0x08,I2C_MEMADD_SIZE_8BIT,&Read_buffer[2],1,100);

@@ -1,2 +1,2 @@
-../Core/Src/BMS_IC.c:38:6:bms_ic_host_control_EN	1
-../Core/Src/BMS_IC.c:42:6:bms_ic_read_voltage	2
+../Core/Src/BMS_IC.c:34:6:bms_ic_host_control_EN	1
+../Core/Src/BMS_IC.c:39:6:bms_ic_read_voltage	2

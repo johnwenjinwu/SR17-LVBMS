@@ -1,2 +1,2 @@
-../Core/Src/BMS_IC_EEPROM.c:36:6:program_eeprom	24	static
-../Core/Src/BMS_IC_EEPROM.c:123:6:bms_ic_eeprom_check	24	static
+../Core/Src/BMS_IC_EEPROM.c:8:6:program_eeprom	24	static
+../Core/Src/BMS_IC_EEPROM.c:88:6:bms_ic_eeprom_check	24	static

@@ -26,7 +26,8 @@ char *DK_message = "VGOOD is Cooked!\r\n";
 char *Done_message = "EEPROM program is Done!\r\n";
 
 uint8_t Read_buffer[5];
-char buffer[5][5];
+uint8_t read_buffer_single;
+char message_buffer[32];
 
 void program_eeprom(void);
 void bms_ic_eeprom_check(void);

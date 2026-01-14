@@ -142,13 +142,13 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  can_send(&current_can_message);
-//	  bms_ic_eeprom_check();
+	  bms_ic_eeprom_check();
 	  bms_ic_read_voltage(&current_batt_info);
-	  sprintf(buffer, "Cell 0: %02f\r\n", current_batt_info.voltage_buffer[4]);
+	  sprintf(buffer, "Cell 0: %02f\rV\n", current_batt_info.voltage_buffer[4]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  sprintf(buffer, "Cell 1: %02f\r\n", current_batt_info.voltage_buffer[5]);
+	  sprintf(buffer, "Cell 1: %02f\rV\n", current_batt_info.voltage_buffer[5]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  sprintf(buffer, "Sum: %02f\r\n", current_batt_info.cell_volt_sum);
+	  sprintf(buffer, "Pack: %02f\rV\n\n", current_batt_info.cell_volt_sum);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 	  HAL_Delay(1000);
 

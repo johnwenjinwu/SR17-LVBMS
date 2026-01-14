@@ -1,0 +1,2 @@
+../Core/Src/BMS_IC.c:38:6:bms_ic_host_control_EN	24	static
+../Core/Src/BMS_IC.c:42:6:bms_ic_read_voltage	40	static

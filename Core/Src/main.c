@@ -105,6 +105,7 @@ int main(void)
   MX_CAN1_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
+  HAL_ADCEx_Calibration_Start(&hadc1);
   /* USER CODE BEGIN 2 */
   HAL_CAN_Start(&hcan1);
   can_message current_can_message = {
@@ -126,7 +127,7 @@ int main(void)
 		  .temp_avg = 0,
   };
 
-  char buffer[5];
+  char buffer[20];
 
 	HAL_StatusTypeDef status = HAL_OK;
 
@@ -144,13 +145,13 @@ int main(void)
 	  can_send(&current_can_message);
 	  bms_ic_eeprom_check();
 	  bms_ic_read_voltage(&current_batt_info);
-	  sprintf(buffer, "Cell 0: %02f\rV\n", current_batt_info.voltage_buffer[4]);
+	  snprintf(buffer, sizeof(buffer), "Cell 0: %.4f V\r\n", current_batt_info.voltage_buffer[4]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  sprintf(buffer, "Cell 1: %02f\rV\n", current_batt_info.voltage_buffer[5]);
+	  snprintf(buffer, sizeof(buffer), "Cell 1: %.4f V\r\n", current_batt_info.voltage_buffer[5]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  sprintf(buffer, "Pack: %02f\rV\n\n", current_batt_info.cell_volt_sum);
+	  snprintf(buffer, sizeof(buffer), "Pack: %.4f V\r\n\n", current_batt_info.cell_volt_sum);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  HAL_Delay(1000);
+	  HAL_Delay(5000);
 
   }
 
@@ -247,7 +248,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();

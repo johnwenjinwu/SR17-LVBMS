@@ -90,27 +90,27 @@ void bms_ic_eeprom_check(){
 		//read from register thru I2C
 		HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, 0x06, I2C_MEMADD_SIZE_8BIT, &Read_buffer[0], 1, HAL_MAX_DELAY);
 		// Convert to string and send
-		sprintf(message_buffer, "OV_CFG: %02X\r\n", Read_buffer[0]);  // or %02X for hex
+		snprintf(message_buffer, sizeof(message_buffer), "OV_CFG: %02X\r\n", Read_buffer[0]);  // or %02X for hex
 		//Transmit data thru UART serial monitor
 		HAL_UART_Transmit(&huart1, (uint8_t*)message_buffer, strlen(message_buffer), HAL_MAX_DELAY);
 		HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, 0x07, I2C_MEMADD_SIZE_8BIT, &Read_buffer[1], 1, HAL_MAX_DELAY);
 		// Convert to string and send
-		sprintf(message_buffer, "UV_CFG: %02X\r\n", Read_buffer[1]);  // or %02X for hex
+		snprintf(message_buffer, sizeof(message_buffer), "UV_CFG: %02X\r\n", Read_buffer[1]);  // or %02X for hex
 		//Transmit data thru UART serial monitor
 		HAL_UART_Transmit(&huart1, (uint8_t*)message_buffer, strlen(message_buffer), HAL_MAX_DELAY);
 		HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, 0x08, I2C_MEMADD_SIZE_8BIT, &Read_buffer[2], 1, HAL_MAX_DELAY);
 		// Convert to string and send
-		sprintf(message_buffer, "OC_UV_DELAY: %02X\r\n", Read_buffer[2]);  // or %02X for hex
+		snprintf(message_buffer, sizeof(message_buffer), "OC_UV_DELAY: %02X\r\n", Read_buffer[2]);  // or %02X for hex
 		//Transmit data thru UART serial monitor
 		HAL_UART_Transmit(&huart1, (uint8_t*)message_buffer, strlen(message_buffer), HAL_MAX_DELAY);
 		HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, 0x09, I2C_MEMADD_SIZE_8BIT, &Read_buffer[3], 1, HAL_MAX_DELAY);
 		// Convert to string and send
-		sprintf(message_buffer, "OCD_CFG: %02X\r\n", Read_buffer[3]);  // or %02X for hex
+		snprintf(message_buffer, sizeof(message_buffer), "OCD_CFG: %02X\r\n", Read_buffer[3]);  // or %02X for hex
 		//Transmit data thru UART serial monitor
 		HAL_UART_Transmit(&huart1, (uint8_t*)message_buffer, strlen(message_buffer), HAL_MAX_DELAY);
 		HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, 0x0A, I2C_MEMADD_SIZE_8BIT, &Read_buffer[4], 1, HAL_MAX_DELAY);
 		// Convert to string and send
-		sprintf(message_buffer, "SCD_CFG: %02X\r\n\n", Read_buffer[4]);  // or %02X for hex
+		snprintf(message_buffer, sizeof(message_buffer), "SCD_CFG: %02X\r\n\n", Read_buffer[4]);  // or %02X for hex
 		//Transmit data thru UART serial monitor
 		HAL_UART_Transmit(&huart1, (uint8_t*)message_buffer, strlen(message_buffer), HAL_MAX_DELAY);
 

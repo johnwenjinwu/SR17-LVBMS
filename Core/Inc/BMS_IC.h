@@ -8,6 +8,10 @@
 #define NUM_CELLS 6
 #define NUM_THEMISTOR 2
 
+extern I2C_HandleTypeDef hi2c1;
+extern UART_HandleTypeDef huart1;
+extern ADC_HandleTypeDef hadc1;
+
 //Cell info buffers
 typedef struct batt_info{
 	float voltage_buffer[NUM_CELLS];
@@ -20,8 +24,22 @@ typedef struct batt_info{
 	float temp_avg;
 }batt_info;
 
+typedef struct fault_info{
+	uint8_t short_circuit;
+	uint8_t overload;
+	uint8_t over_voltage;
+	uint8_t under_voltage;
+	uint8_t over_temperature;
+	uint8_t vgood;
+	uint8_t discharge_fet;
+	uint8_t charge_fet;
+}fault_info;
+
 void bms_ic_host_control_EN();
 void bms_ic_read_voltage(batt_info *b);
+void bms_ic_read_faults(fault_info *f);
+void bms_ic_balance_cells(batt_info *b);
+void bms_ic_top3_sort(batt_info *b, float *top3, uint8_t *indexes);
 
 
 #endif /* __BMS_IC_H */

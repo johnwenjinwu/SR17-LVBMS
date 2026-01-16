@@ -18,12 +18,12 @@ const uint8_t state_control_reg = 0x02;
 const uint8_t function_control_reg = 0x03;
 const uint8_t cell_balance_reg = 0x04;
 const uint8_t cell_sel_reg = 0x05;
-uint8_t HOST_EN = 0xC2;
-uint8_t ADC_EN = 0x23;
-uint8_t BAT = 0x33;
-uint8_t DSG = 0x02;
-uint8_t SHDN = 0x01;
-uint8_t CELL_Voltage[10] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
+const uint8_t HOST_EN = 0xC2;
+const uint8_t ADC_EN = 0x23;
+const uint8_t BAT = 0x33;
+const uint8_t DSG = 0x02;
+const uint8_t SHDN = 0x01;
+const uint8_t CELL_Voltage[10] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
 float vadc, adc_val;
 
 void bms_ic_host_control_EN(){
@@ -57,9 +57,14 @@ void bms_ic_read_voltage(batt_info_t *b){
 }
 
 void bms_ic_read_faults(batt_info_t *b){
+	uint8_t data = 0x01;
 	HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, status_reg, I2C_MEMADD_SIZE_8BIT, &b->fault_info, sizeof(uint8_t), 100);
+	//Clear fault info after reading by toggleling LTCLR to 1 then 0
+	HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, output_control_reg, I2C_MEMADD_SIZE_8BIT, &data, 1, 100);
+	data = 0x00;
+	HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, output_control_reg, I2C_MEMADD_SIZE_8BIT, &data, 1, 100);
 }
-
+         
 /*This function calls the top3 sort function and balances the top 3 highest cells
 If top three are not neighbor, balance all 3
 If top three are neighbor, check if top two are neighbor

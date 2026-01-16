@@ -31,7 +31,7 @@ void bms_ic_host_control_EN(){
 	HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR,function_control_reg,I2C_MEMADD_SIZE_8BIT,&ADC_EN,1,100);
 }
 
-void bms_ic_read_voltage(batt_info *b){
+void bms_ic_read_voltage(batt_info_t *b){
 	  for(int i=0; i<6; i++){
 		  // Send I2C command to switch cell reading to ADC pin
 		  HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i],1,100);
@@ -56,7 +56,7 @@ void bms_ic_read_voltage(batt_info *b){
 	  HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
 }
 
-void bms_ic_read_faults(batt_info *b){
+void bms_ic_read_faults(batt_info_t *b){
 	HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, status_reg, I2C_MEMADD_SIZE_8BIT, &b->fault_info, sizeof(uint8_t), 100);
 }
 
@@ -68,7 +68,7 @@ Else balance top two cells
 The check uses absolute difference between cell indexes
 If difference is 1, they are neighbor*/
 
-void bms_ic_balance_cells(batt_info *b){
+void bms_ic_balance_cells(batt_info_t *b){
 	//make array to hold top 3 highest cells
 	float top3_cells[3] = {0.0, 0.0, 0.0};
 	//make array to hold top 3 highest cell indexes
@@ -102,7 +102,7 @@ void bms_ic_balance_cells(batt_info *b){
 }
 
 //This function sorts the top 3 highest cells in descending order
-void bms_ic_top3_sort(batt_info *b, float *top3, uint8_t *indexes){
+void bms_ic_top3_sort(batt_info_t *b, float *top3, uint8_t *indexes){
 	float h1 = -1.0, h2 = -1.0, h3 = -1.0;
 	uint8_t i1 = 0, i2 = 0, i3 = 0;
 

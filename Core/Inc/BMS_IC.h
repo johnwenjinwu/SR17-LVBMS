@@ -13,7 +13,7 @@ extern UART_HandleTypeDef huart1;
 extern ADC_HandleTypeDef hadc1;
 
 //Cell info buffers
-typedef struct batt_info{
+typedef struct batt_info_t{
 	float voltage_buffer[NUM_CELLS];
 	float temp_buffer[NUM_THEMISTOR];
 	float cell_volt_lowest;
@@ -23,14 +23,14 @@ typedef struct batt_info{
 	float cell_volt_sum;
 	float temp_avg;
 	uint8_t fault_info;
-}batt_info;
+}batt_info_t;
 
 
 void bms_ic_host_control_EN();
-void bms_ic_read_voltage(batt_info *b);
-void bms_ic_read_faults(batt_info *b);
-void bms_ic_balance_cells(batt_info *b);
-void bms_ic_top3_sort(batt_info *b, float *top3, uint8_t *indexes);
+void bms_ic_read_voltage(batt_info_t *b);
+void bms_ic_read_faults(batt_info_t *b);
+void bms_ic_balance_cells(batt_info_t *b);
+void bms_ic_top3_sort(batt_info_t *b, float *top3, uint8_t *indexes);
 
 
 #endif /* __BMS_IC_H */

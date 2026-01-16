@@ -6,12 +6,12 @@
 
 extern CAN_HandleTypeDef hcan1;
 
-typedef struct can_message{
+typedef struct can_message_t{
 	CAN_TxHeaderTypeDef tx_header;
 	uint8_t can_data[8];
 	uint32_t tx_mailbox;
-}can_message;
+}can_message_t;
 
-void can_send(can_message *m);
+void can_send(can_message_t *m);
 
 #endif /* INC_CAN_H_ */

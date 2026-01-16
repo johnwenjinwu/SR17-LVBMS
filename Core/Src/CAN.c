@@ -4,7 +4,7 @@
 #include "main.h"
 #include "CAN.h"
 
-void can_send(can_message *m){
+void can_send(can_message_t *m){
 	m->can_data[0] = 12;
 	m->can_data[1] = 34;
 	m->can_data[2] = 56;

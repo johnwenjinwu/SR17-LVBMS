@@ -105,8 +105,8 @@ int main(void)
   MX_CAN1_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
-  HAL_ADCEx_Calibration_Start(&hadc1);
   /* USER CODE BEGIN 2 */
+  HAL_ADCEx_Calibration_Start(&hadc1);
   HAL_CAN_Start(&hcan1);
   can_message current_can_message = {
 		  .tx_header.StdId = 0,
@@ -115,7 +115,6 @@ int main(void)
 		  .tx_header.RTR = CAN_RTR_DATA,
 		  .tx_header.DLC = 8,
   };
-
   batt_info current_batt_info ={
 		  .voltage_buffer = {0},
 		  .temp_buffer = {0},
@@ -125,12 +124,10 @@ int main(void)
 		  .cell_volt_lowest = 0,
 		  .cell_volt_sum = 0,
 		  .temp_avg = 0,
+		  .fault_info = 0,
   };
-
   char buffer[20];
-
 	HAL_StatusTypeDef status = HAL_OK;
-
 	bms_ic_host_control_EN();
 
   /* USER CODE END 2 */
@@ -149,7 +146,10 @@ int main(void)
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 	  snprintf(buffer, sizeof(buffer), "Cell 1: %.4f V\r\n", current_batt_info.voltage_buffer[5]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  snprintf(buffer, sizeof(buffer), "Pack: %.4f V\r\n\n", current_batt_info.cell_volt_sum);
+	  snprintf(buffer, sizeof(buffer), "Pack: %.4f V\r\n", current_batt_info.cell_volt_sum);
+	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+	  bms_ic_read_faults(&current_batt_info);
+	  snprintf(buffer, sizeof(buffer), "Fault Reg: %d \r\n\n", current_batt_info.fault_info);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 	  HAL_Delay(5000);
 

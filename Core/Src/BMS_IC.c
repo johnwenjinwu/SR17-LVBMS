@@ -56,8 +56,8 @@ void bms_ic_read_voltage(batt_info *b){
 	  HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
 }
 
-void bms_ic_read_faults(fault_info *f){
-	HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, status_reg, I2C_MEMADD_SIZE_8BIT, (uint8_t*)f, sizeof(fault_info), 100);
+void bms_ic_read_faults(batt_info *b){
+	HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, status_reg, I2C_MEMADD_SIZE_8BIT, &b->fault_info, sizeof(uint8_t), 100);
 }
 
 /*This function calls the top3 sort function and balances the top 3 highest cells

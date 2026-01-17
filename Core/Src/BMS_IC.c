@@ -47,18 +47,18 @@ void bms_ic_read_voltage(batt_info_t *b){
 	  // Turns on BAT to ADC
 	  HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &BAT,1,100);
 	  HAL_Delay(1);
-	  //ADC reading
+	  //ADC reading, this is represent in (1/100)V
 	  HAL_ADC_Start(&hadc1);
 	  HAL_ADC_PollForConversion(&hadc1, 100);
 	  adc_val = HAL_ADC_GetValue(&hadc1);
 	  vadc = (adc_val * 3.3) / 4095.0;
-	  b->cell_volt_sum = (vadc * 1000 / 50);
+	  b->cell_volt_sum = (vadc * 100 / 50);
 	  HAL_ADC_Stop(&hadc1);
 	  // Turns off Pack to ADC
 	  HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
 }
 
-//This function reads current represents in mV
+//This function reads current represents in (1/100)A
 void bms_ic_read_current(batt_info_t *b){
 	//ADC reading
 	sConfig.Channel = ADC_CHANNEL_1;
@@ -70,7 +70,7 @@ void bms_ic_read_current(batt_info_t *b){
 	HAL_ADC_PollForConversion(&hadc1, 100);
 	adc_val = HAL_ADC_GetValue(&hadc1);
 	vadc = (adc_val * 3.3) / 4095.0;
-	b->current = (vadc * 1000 / 5);
+	b->current = 1000 * (vadc - 1.2) / (50 * 0.004);
 	HAL_ADC_Stop(&hadc1);
 }
 

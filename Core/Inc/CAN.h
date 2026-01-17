@@ -12,7 +12,7 @@ typedef struct can_id_lookup_t{
 	uint8_t bms_message_1_id; //ID for cells 0-3
 	uint8_t bms_message_2_id; //ID for cells 4-5 + highest + lowest
 	uint8_t bms_message_3_id; //ID for cell_avg, cell_diff, pack voltage, cell current
-	uint8_t bms_message_4_id; //ID for temperatures + fault info + balancing status
+	uint8_t bms_message_4_id; //ID for temperature + fault info + balancing status
 } can_id_lookup_t;
 
 typedef struct can_message_t{

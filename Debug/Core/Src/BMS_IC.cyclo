@@ -1,5 +1,7 @@
 ../Core/Src/BMS_IC.c:29:6:bms_ic_host_control_EN	1
 ../Core/Src/BMS_IC.c:35:6:bms_ic_read_voltage	2
-../Core/Src/BMS_IC.c:60:6:bms_ic_read_faults	1
-../Core/Src/BMS_IC.c:77:6:bms_ic_balance_cells	5
-../Core/Src/BMS_IC.c:111:6:bms_ic_top3_sort	5
+../Core/Src/BMS_IC.c:62:6:bms_ic_read_current	1
+../Core/Src/BMS_IC.c:77:6:bms_ic_read_temp	1
+../Core/Src/BMS_IC.c:92:6:bms_ic_read_faults	1
+../Core/Src/BMS_IC.c:109:6:bms_ic_balance_cells	5
+../Core/Src/BMS_IC.c:143:6:bms_ic_top3_sort	5

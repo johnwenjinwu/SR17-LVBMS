@@ -53,8 +53,40 @@ void bms_ic_read_voltage(batt_info_t *b){
 	  adc_val = HAL_ADC_GetValue(&hadc1);
 	  vadc = (adc_val * 3.3) / 4095.0;
 	  b->cell_volt_sum = (vadc * 1000 / 50);
+	  HAL_ADC_Stop(&hadc1);
 	  // Turns off Pack to ADC
 	  HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
+}
+
+//This function reads current represents in mV
+void bms_ic_read_current(batt_info_t *b){
+	//ADC reading
+	sConfig.Channel = ADC_CHANNEL_1;
+	sConfig.Rank = ADC_REGULAR_RANK_1;
+	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+
+	HAL_ADC_Start(&hadc1);
+	HAL_ADC_PollForConversion(&hadc1, 100);
+	adc_val = HAL_ADC_GetValue(&hadc1);
+	vadc = (adc_val * 3.3) / 4095.0;
+	b->current = (vadc * 1000 / 5);
+	HAL_ADC_Stop(&hadc1);
+}
+
+void bms_ic_read_temp(batt_info_t *b){
+	//ADC reading
+	sConfig.Channel = ADC_CHANNEL_6;
+	sConfig.Rank = ADC_REGULAR_RANK_1;
+	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+
+	HAL_ADC_Start(&hadc1);
+	HAL_ADC_PollForConversion(&hadc1, 100);
+	adc_val = HAL_ADC_GetValue(&hadc1);
+	vadc = (adc_val * 3.3) / 4095.0;
+	b->temp_buffer = (vadc * 1000 / 5);
+	HAL_ADC_Stop(&hadc1);
 }
 
 void bms_ic_read_faults(batt_info_t *b){

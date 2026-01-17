@@ -129,7 +129,6 @@ int main(void)
 		  .cell_volt_highest = 0,
 		  .cell_volt_lowest = 0,
 		  .cell_volt_sum = 0,
-		  .temp_avg = 0,
 		  .fault_info = 0,
   };
   char buffer[20];

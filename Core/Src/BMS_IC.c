@@ -59,7 +59,7 @@ void bms_ic_read_voltage(batt_info_t *b){
 	  HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
 }
 
-//This function reads current represents in (1/100)A
+//This function reads current represents in mA
 void bms_ic_read_current(batt_info_t *b){
 	//ADC reading
 	sConfig.Channel = ADC_CHANNEL_1;
@@ -75,6 +75,7 @@ void bms_ic_read_current(batt_info_t *b){
 	HAL_ADC_Stop(&hadc1);
 }
 
+////This function reads temp represents in mC
 void bms_ic_read_temp(batt_info_t *b){
 	//ADC reading
 	sConfig.Channel = ADC_CHANNEL_6;
@@ -87,7 +88,7 @@ void bms_ic_read_temp(batt_info_t *b){
 	adc_val = HAL_ADC_GetValue(&hadc1);
 	vadc = (adc_val * 3.3) / 4095.0;
 	uint8_t kelvin = 298.15, beta = 4275, Rt = 10000, R1 = 47000;
-	b->temp_buffer = (1/((1/kelvin)+(1/beta)*log(vadc*R1/(Rt*(3.3-vadc)))));
+	b->temp_buffer = 1000*(1/((1/kelvin)+(1/beta)*log(vadc*R1/(Rt*(3.3-vadc)))));
 	HAL_ADC_Stop(&hadc1);
 }
 

@@ -14,14 +14,15 @@ extern ADC_HandleTypeDef hadc1;
 
 //Cell info buffers
 typedef struct batt_info_t{
-	float voltage_buffer[NUM_CELLS];
-	float temp_buffer[NUM_THEMISTOR];
-	float cell_volt_lowest;
-	float cell_volt_highest;
-	float cell_volt_avg;
-	float cell_volt_diff;
-	float cell_volt_sum;
-	float temp_avg;
+	uint16_t voltage_buffer[NUM_CELLS];
+	uint16_t temp_buffer[NUM_THEMISTOR];
+	uint16_t cell_volt_lowest;
+	uint16_t cell_volt_highest;
+	uint16_t cell_volt_avg;
+	uint16_t cell_volt_diff;
+	uint16_t cell_volt_sum;
+	uint16_t temp_avg;
+	uint16_t current;
 	uint8_t fault_info;
 }batt_info_t;
 

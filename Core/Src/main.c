@@ -115,6 +115,12 @@ int main(void)
 		  .tx_header.RTR = CAN_RTR_DATA,
 		  .tx_header.DLC = 8,
   };
+  can_id_lookup_t can_id_lookup ={
+		  .bms_message_1_id = 666,
+		  .bms_message_2_id = 667,
+		  .bms_message_3_id = 668,
+		  .bms_message_4_id = 669
+  };
   batt_info_t batt_info ={
 		  .voltage_buffer = {0},
 		  .temp_buffer = {0},
@@ -139,18 +145,19 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  can_send(&can_message);
 	  bms_ic_eeprom_check();
 	  bms_ic_read_voltage(&batt_info);
-	  snprintf(buffer, sizeof(buffer), "Cell 0: %.4f V\r\n", batt_info.voltage_buffer[4]);
+	  snprintf(buffer, sizeof(buffer), "Cell 0: %.4f mV\r\n", batt_info.voltage_buffer[4]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  snprintf(buffer, sizeof(buffer), "Cell 1: %.4f V\r\n", batt_info.voltage_buffer[5]);
+	  snprintf(buffer, sizeof(buffer), "Cell 1: %.4f mV\r\n", batt_info.voltage_buffer[5]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  snprintf(buffer, sizeof(buffer), "Pack: %.4f V\r\n", batt_info.cell_volt_sum);
+	  snprintf(buffer, sizeof(buffer), "Pack: %.4f mV\r\n", batt_info.cell_volt_sum);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 	  bms_ic_read_faults(&batt_info);
 	  snprintf(buffer, sizeof(buffer), "Fault Reg: %d \r\n\n", batt_info.fault_info);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+
+	  can_send(&batt_info, &can_id_lookup, &can_message);
 	  HAL_Delay(5000);
 
   }

@@ -31,6 +31,7 @@ void bms_ic_host_control_EN(){
 	HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR,function_control_reg,I2C_MEMADD_SIZE_8BIT,&ADC_EN,1,100);
 }
 
+//This function reads cell voltages and pack voltage and represents in mV
 void bms_ic_read_voltage(batt_info_t *b){
 	  for(int i=0; i<6; i++){
 		  // Send I2C command to switch cell reading to ADC pin
@@ -41,7 +42,7 @@ void bms_ic_read_voltage(batt_info_t *b){
 		  HAL_ADC_PollForConversion(&hadc1, 100);
 		  adc_val = HAL_ADC_GetValue(&hadc1);
 		  vadc = (adc_val * 3.3) / 4095.0;
-		  b->voltage_buffer[i] = ((1.2 - (vadc + 0)) / 0.2);
+		  b->voltage_buffer[i] = (1000 * ((1.2 - (vadc + 0)) / 0.2));
 	  }
 	  // Turns on BAT to ADC
 	  HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &BAT,1,100);
@@ -51,7 +52,7 @@ void bms_ic_read_voltage(batt_info_t *b){
 	  HAL_ADC_PollForConversion(&hadc1, 100);
 	  adc_val = HAL_ADC_GetValue(&hadc1);
 	  vadc = (adc_val * 3.3) / 4095.0;
-	  b->cell_volt_sum = (vadc / 50);
+	  b->cell_volt_sum = (vadc * 1000 / 50);
 	  // Turns off Pack to ADC
 	  HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
 }

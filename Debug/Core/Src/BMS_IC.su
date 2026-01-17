@@ -1,7 +1,7 @@
-../Core/Src/BMS_IC.c:29:6:bms_ic_host_control_EN	24	static
-../Core/Src/BMS_IC.c:35:6:bms_ic_read_voltage	40	static
-../Core/Src/BMS_IC.c:62:6:bms_ic_read_current	16	static
-../Core/Src/BMS_IC.c:77:6:bms_ic_read_temp	16	static
-../Core/Src/BMS_IC.c:92:6:bms_ic_read_faults	40	static
-../Core/Src/BMS_IC.c:109:6:bms_ic_balance_cells	56	static
-../Core/Src/BMS_IC.c:143:6:bms_ic_top3_sort	48	static
+../Core/Src/BMS_IC.c:30:6:bms_ic_host_control_EN	24	static
+../Core/Src/BMS_IC.c:36:6:bms_ic_read_voltage	40	static
+../Core/Src/BMS_IC.c:63:6:bms_ic_read_current	16	static
+../Core/Src/BMS_IC.c:78:6:bms_ic_read_temp	56	static
+../Core/Src/BMS_IC.c:94:6:bms_ic_read_faults	40	static
+../Core/Src/BMS_IC.c:111:6:bms_ic_balance_cells	56	static
+../Core/Src/BMS_IC.c:145:6:bms_ic_top3_sort	48	static

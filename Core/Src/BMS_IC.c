@@ -11,6 +11,7 @@ Read current
 
 #include "main.h"
 #include "BMS_IC.h"
+#include <math.h>
 
 const uint8_t status_reg = 0x00;  
 const uint8_t output_control_reg = 0x01;
@@ -85,7 +86,8 @@ void bms_ic_read_temp(batt_info_t *b){
 	HAL_ADC_PollForConversion(&hadc1, 100);
 	adc_val = HAL_ADC_GetValue(&hadc1);
 	vadc = (adc_val * 3.3) / 4095.0;
-	b->temp_buffer = (vadc * 1000 / 5);
+	uint8_t kelvin = 298.15, beta = 4275, Rt = 10000, R1 = 47000;
+	b->temp_buffer = (1/((1/kelvin)+(1/beta)*log(vadc*R1/(Rt*(3.3-vadc)))));
 	HAL_ADC_Stop(&hadc1);
 }
 

@@ -16,7 +16,7 @@ BO_ 668 bms_message_3: 8 LVBMS
 	SG_ LVBMS_batt_volt : 32|16@1+ (0.001,0) [0|25] "V" LVBMS
 	SG_ LVBMS_current : 48|16@1+ (0.001,0) [0|8] "A" LVBMS
 	
-BO_ 666 bms_message_4: 8 LVBMS(TBD
+BO_ 666 bms_message_4: 8 LVBMS
 	SG_ LVBMS_Cell_0 : 0|16@1+ (0.001,0) [0|6.5535] "V" LVBMS
 	SG_ LVBMS_Cell_1 : 16|16@1+ (0.001,0) [0|6.5535] "V" LVBMS
 	SG_ LVBMS_Cell_2 : 32|16@1+ (0.001,0) [0|6.5535] "V" LVBMS

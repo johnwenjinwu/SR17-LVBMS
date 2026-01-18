@@ -34,7 +34,14 @@ void bms_ic_host_control_EN(){
 
 //This function reads cell voltages and pack voltage and represents in mV
 void bms_ic_read_voltage(batt_info_t *b){
-	  for(int i=0; i<6; i++){
+
+	ADC_ChannelConfTypeDef sConfig = {0};
+	sConfig.Channel = ADC_CHANNEL_0;
+	sConfig.Rank = ADC_REGULAR_RANK_1;
+	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+
+	for(int i=0; i<6; i++){
 		  // Send I2C command to switch cell reading to ADC pin
 		  HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i],1,100);
 		  HAL_Delay(1);
@@ -62,6 +69,7 @@ void bms_ic_read_voltage(batt_info_t *b){
 //This function reads current represents in mA
 void bms_ic_read_current(batt_info_t *b){
 	//ADC reading
+	ADC_ChannelConfTypeDef sConfig = {0};
 	sConfig.Channel = ADC_CHANNEL_1;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
 	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
@@ -78,6 +86,7 @@ void bms_ic_read_current(batt_info_t *b){
 ////This function reads temp represents in mC
 void bms_ic_read_temp(batt_info_t *b){
 	//ADC reading
+	ADC_ChannelConfTypeDef sConfig = {0};
 	sConfig.Channel = ADC_CHANNEL_6;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
 	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;

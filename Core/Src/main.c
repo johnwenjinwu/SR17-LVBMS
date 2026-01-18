@@ -131,7 +131,7 @@ int main(void)
 		  .cell_volt_sum = 0,
 		  .fault_info = 0,
   };
-  char buffer[20];
+  char buffer[32];
 	HAL_StatusTypeDef status = HAL_OK;
 	bms_ic_host_control_EN();
 
@@ -146,15 +146,22 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  bms_ic_eeprom_check();
 	  bms_ic_read_voltage(&batt_info);
-	  snprintf(buffer, sizeof(buffer), "Cell 0: %.4f mV\r\n", batt_info.voltage_buffer[4]);
+	  snprintf(buffer, sizeof(buffer), "Cell 0: %d mV\r\n", batt_info.voltage_buffer[4]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  snprintf(buffer, sizeof(buffer), "Cell 1: %.4f mV\r\n", batt_info.voltage_buffer[5]);
+	  snprintf(buffer, sizeof(buffer), "Cell 1: %d mV\r\n", batt_info.voltage_buffer[5]);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  snprintf(buffer, sizeof(buffer), "Pack: %.4f mV\r\n", batt_info.cell_volt_sum);
+	  snprintf(buffer, sizeof(buffer), "Pack: %d mV\r\n", batt_info.cell_volt_sum);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 	  bms_ic_read_faults(&batt_info);
-	  snprintf(buffer, sizeof(buffer), "Fault Reg: %d \r\n\n", batt_info.fault_info);
+	  snprintf(buffer, sizeof(buffer), "Fault Reg: %d \r\n", batt_info.fault_info);
 	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+	  bms_ic_read_current(&batt_info);
+	  bms_ic_read_temp(&batt_info);
+	  snprintf(buffer, sizeof(buffer), "Current: %d mA\r\n", batt_info.current);
+	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+	  snprintf(buffer, sizeof(buffer), "Temp: %d mC\r\n\n", batt_info.temp_buffer);
+	  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+
 
 	  can_send(&batt_info, &can_id_lookup, &can_message);
 	  HAL_Delay(5000);

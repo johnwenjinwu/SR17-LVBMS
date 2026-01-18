@@ -10,7 +10,6 @@
 extern I2C_HandleTypeDef hi2c1;
 extern UART_HandleTypeDef huart1;
 extern ADC_HandleTypeDef hadc1;
-extern ADC_ChannelConfTypeDef sConfig;
 
 //Cell info buffers
 typedef struct batt_info_t{

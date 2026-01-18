@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  000205b8  00000000  00000000  0001fa50  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00012daa  00000000  00000000  00040008  2**0
+ 17 .debug_line   00012db0  00000000  00000000  00040008  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000b7ed0  00000000  00000000  00052db2  2**0
+ 18 .debug_str    000b7ed0  00000000  00000000  00052db8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  0010ac82  2**0
+ 19 .comment      00000043  00000000  00000000  0010ac88  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00004bd8  00000000  00000000  0010acc8  2**2
+ 20 .debug_frame  00004bd8  00000000  00000000  0010accc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000005d  00000000  00000000  0010f8a0  2**0
+ 21 .debug_line_str 0000005d  00000000  00000000  0010f8a4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1768,283 +1768,284 @@ void bms_ic_read_voltage(batt_info_t *b){
 	for(int i=0; i<6; i++){
  8001500:	2300      	movs	r3, #0
  8001502:	61fb      	str	r3, [r7, #28]
- 8001504:	e072      	b.n	80015ec <bms_ic_read_voltage+0x12c>
+ 8001504:	e073      	b.n	80015ee <bms_ic_read_voltage+0x12e>
 		// Send I2C command to switch cell reading to ADC pin
-		HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i],1,100);
+		HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i+4],1,100);
  8001506:	2305      	movs	r3, #5
  8001508:	4619      	mov	r1, r3
  800150a:	69fb      	ldr	r3, [r7, #28]
- 800150c:	4a91      	ldr	r2, [pc, #580]	@ (8001754 <bms_ic_read_voltage+0x294>)
- 800150e:	4413      	add	r3, r2
- 8001510:	2264      	movs	r2, #100	@ 0x64
- 8001512:	9202      	str	r2, [sp, #8]
- 8001514:	2201      	movs	r2, #1
- 8001516:	9201      	str	r2, [sp, #4]
- 8001518:	9300      	str	r3, [sp, #0]
- 800151a:	2301      	movs	r3, #1
- 800151c:	460a      	mov	r2, r1
- 800151e:	2120      	movs	r1, #32
- 8001520:	488d      	ldr	r0, [pc, #564]	@ (8001758 <bms_ic_read_voltage+0x298>)
- 8001522:	f003 f853 	bl	80045cc <HAL_I2C_Mem_Write>
+ 800150c:	3304      	adds	r3, #4
+ 800150e:	4a91      	ldr	r2, [pc, #580]	@ (8001754 <bms_ic_read_voltage+0x294>)
+ 8001510:	4413      	add	r3, r2
+ 8001512:	2264      	movs	r2, #100	@ 0x64
+ 8001514:	9202      	str	r2, [sp, #8]
+ 8001516:	2201      	movs	r2, #1
+ 8001518:	9201      	str	r2, [sp, #4]
+ 800151a:	9300      	str	r3, [sp, #0]
+ 800151c:	2301      	movs	r3, #1
+ 800151e:	460a      	mov	r2, r1
+ 8001520:	2120      	movs	r1, #32
+ 8001522:	488d      	ldr	r0, [pc, #564]	@ (8001758 <bms_ic_read_voltage+0x298>)
+ 8001524:	f003 f852 	bl	80045cc <HAL_I2C_Mem_Write>
 		HAL_Delay(1);
- 8001526:	2001      	movs	r0, #1
- 8001528:	f001 fa44 	bl	80029b4 <HAL_Delay>
+ 8001528:	2001      	movs	r0, #1
+ 800152a:	f001 fa43 	bl	80029b4 <HAL_Delay>
 		//ADC reading
 		HAL_ADC_Start(&hadc1);
- 800152c:	4888      	ldr	r0, [pc, #544]	@ (8001750 <bms_ic_read_voltage+0x290>)
- 800152e:	f001 fb3d 	bl	8002bac <HAL_ADC_Start>
+ 800152e:	4888      	ldr	r0, [pc, #544]	@ (8001750 <bms_ic_read_voltage+0x290>)
+ 8001530:	f001 fb3c 	bl	8002bac <HAL_ADC_Start>
 		HAL_ADC_PollForConversion(&hadc1, 100);
- 8001532:	2164      	movs	r1, #100	@ 0x64
- 8001534:	4886      	ldr	r0, [pc, #536]	@ (8001750 <bms_ic_read_voltage+0x290>)
- 8001536:	f001 fc13 	bl	8002d60 <HAL_ADC_PollForConversion>
+ 8001534:	2164      	movs	r1, #100	@ 0x64
+ 8001536:	4886      	ldr	r0, [pc, #536]	@ (8001750 <bms_ic_read_voltage+0x290>)
+ 8001538:	f001 fc12 	bl	8002d60 <HAL_ADC_PollForConversion>
 		adc_val = HAL_ADC_GetValue(&hadc1);
- 800153a:	4885      	ldr	r0, [pc, #532]	@ (8001750 <bms_ic_read_voltage+0x290>)
- 800153c:	f001 fd16 	bl	8002f6c <HAL_ADC_GetValue>
- 8001540:	4603      	mov	r3, r0
- 8001542:	4618      	mov	r0, r3
- 8001544:	f7ff fc32 	bl	8000dac <__aeabi_ui2f>
- 8001548:	4603      	mov	r3, r0
- 800154a:	4a84      	ldr	r2, [pc, #528]	@ (800175c <bms_ic_read_voltage+0x29c>)
- 800154c:	6013      	str	r3, [r2, #0]
+ 800153c:	4884      	ldr	r0, [pc, #528]	@ (8001750 <bms_ic_read_voltage+0x290>)
+ 800153e:	f001 fd15 	bl	8002f6c <HAL_ADC_GetValue>
+ 8001542:	4603      	mov	r3, r0
+ 8001544:	4618      	mov	r0, r3
+ 8001546:	f7ff fc31 	bl	8000dac <__aeabi_ui2f>
+ 800154a:	4603      	mov	r3, r0
+ 800154c:	4a83      	ldr	r2, [pc, #524]	@ (800175c <bms_ic_read_voltage+0x29c>)
+ 800154e:	6013      	str	r3, [r2, #0]
 		vadc = (adc_val * 3.3) / 4095.0;
- 800154e:	4b83      	ldr	r3, [pc, #524]	@ (800175c <bms_ic_read_voltage+0x29c>)
- 8001550:	681b      	ldr	r3, [r3, #0]
- 8001552:	4618      	mov	r0, r3
- 8001554:	f7fe ffd4 	bl	8000500 <__aeabi_f2d>
- 8001558:	a377      	add	r3, pc, #476	@ (adr r3, 8001738 <bms_ic_read_voltage+0x278>)
- 800155a:	e9d3 2300 	ldrd	r2, r3, [r3]
- 800155e:	f7ff f827 	bl	80005b0 <__aeabi_dmul>
- 8001562:	4602      	mov	r2, r0
- 8001564:	460b      	mov	r3, r1
- 8001566:	4610      	mov	r0, r2
- 8001568:	4619      	mov	r1, r3
- 800156a:	a375      	add	r3, pc, #468	@ (adr r3, 8001740 <bms_ic_read_voltage+0x280>)
- 800156c:	e9d3 2300 	ldrd	r2, r3, [r3]
- 8001570:	f7ff f948 	bl	8000804 <__aeabi_ddiv>
- 8001574:	4602      	mov	r2, r0
- 8001576:	460b      	mov	r3, r1
- 8001578:	4610      	mov	r0, r2
- 800157a:	4619      	mov	r1, r3
- 800157c:	f7ff fb10 	bl	8000ba0 <__aeabi_d2f>
- 8001580:	4603      	mov	r3, r0
- 8001582:	4a77      	ldr	r2, [pc, #476]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
- 8001584:	6013      	str	r3, [r2, #0]
+ 8001550:	4b82      	ldr	r3, [pc, #520]	@ (800175c <bms_ic_read_voltage+0x29c>)
+ 8001552:	681b      	ldr	r3, [r3, #0]
+ 8001554:	4618      	mov	r0, r3
+ 8001556:	f7fe ffd3 	bl	8000500 <__aeabi_f2d>
+ 800155a:	a377      	add	r3, pc, #476	@ (adr r3, 8001738 <bms_ic_read_voltage+0x278>)
+ 800155c:	e9d3 2300 	ldrd	r2, r3, [r3]
+ 8001560:	f7ff f826 	bl	80005b0 <__aeabi_dmul>
+ 8001564:	4602      	mov	r2, r0
+ 8001566:	460b      	mov	r3, r1
+ 8001568:	4610      	mov	r0, r2
+ 800156a:	4619      	mov	r1, r3
+ 800156c:	a374      	add	r3, pc, #464	@ (adr r3, 8001740 <bms_ic_read_voltage+0x280>)
+ 800156e:	e9d3 2300 	ldrd	r2, r3, [r3]
+ 8001572:	f7ff f947 	bl	8000804 <__aeabi_ddiv>
+ 8001576:	4602      	mov	r2, r0
+ 8001578:	460b      	mov	r3, r1
+ 800157a:	4610      	mov	r0, r2
+ 800157c:	4619      	mov	r1, r3
+ 800157e:	f7ff fb0f 	bl	8000ba0 <__aeabi_d2f>
+ 8001582:	4603      	mov	r3, r0
+ 8001584:	4a76      	ldr	r2, [pc, #472]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
+ 8001586:	6013      	str	r3, [r2, #0]
 		b->voltage_buffer[i] = (1000 * ((1.2 - (vadc + 0)) / 0.2));
- 8001586:	4b76      	ldr	r3, [pc, #472]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
- 8001588:	681b      	ldr	r3, [r3, #0]
- 800158a:	f04f 0100 	mov.w	r1, #0
- 800158e:	4618      	mov	r0, r3
- 8001590:	f7ff fb5c 	bl	8000c4c <__addsf3>
- 8001594:	4603      	mov	r3, r0
- 8001596:	4618      	mov	r0, r3
- 8001598:	f7fe ffb2 	bl	8000500 <__aeabi_f2d>
- 800159c:	4602      	mov	r2, r0
- 800159e:	460b      	mov	r3, r1
- 80015a0:	f04f 3033 	mov.w	r0, #858993459	@ 0x33333333
- 80015a4:	496f      	ldr	r1, [pc, #444]	@ (8001764 <bms_ic_read_voltage+0x2a4>)
- 80015a6:	f7fe fe4b 	bl	8000240 <__aeabi_dsub>
- 80015aa:	4602      	mov	r2, r0
- 80015ac:	460b      	mov	r3, r1
- 80015ae:	4610      	mov	r0, r2
- 80015b0:	4619      	mov	r1, r3
- 80015b2:	a365      	add	r3, pc, #404	@ (adr r3, 8001748 <bms_ic_read_voltage+0x288>)
- 80015b4:	e9d3 2300 	ldrd	r2, r3, [r3]
- 80015b8:	f7ff f924 	bl	8000804 <__aeabi_ddiv>
- 80015bc:	4602      	mov	r2, r0
- 80015be:	460b      	mov	r3, r1
- 80015c0:	4610      	mov	r0, r2
- 80015c2:	4619      	mov	r1, r3
- 80015c4:	f04f 0200 	mov.w	r2, #0
- 80015c8:	4b67      	ldr	r3, [pc, #412]	@ (8001768 <bms_ic_read_voltage+0x2a8>)
- 80015ca:	f7fe fff1 	bl	80005b0 <__aeabi_dmul>
- 80015ce:	4602      	mov	r2, r0
- 80015d0:	460b      	mov	r3, r1
- 80015d2:	4610      	mov	r0, r2
- 80015d4:	4619      	mov	r1, r3
- 80015d6:	f7ff fac3 	bl	8000b60 <__aeabi_d2uiz>
- 80015da:	4603      	mov	r3, r0
- 80015dc:	b299      	uxth	r1, r3
- 80015de:	687b      	ldr	r3, [r7, #4]
- 80015e0:	69fa      	ldr	r2, [r7, #28]
- 80015e2:	f823 1012 	strh.w	r1, [r3, r2, lsl #1]
+ 8001588:	4b75      	ldr	r3, [pc, #468]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
+ 800158a:	681b      	ldr	r3, [r3, #0]
+ 800158c:	f04f 0100 	mov.w	r1, #0
+ 8001590:	4618      	mov	r0, r3
+ 8001592:	f7ff fb5b 	bl	8000c4c <__addsf3>
+ 8001596:	4603      	mov	r3, r0
+ 8001598:	4618      	mov	r0, r3
+ 800159a:	f7fe ffb1 	bl	8000500 <__aeabi_f2d>
+ 800159e:	4602      	mov	r2, r0
+ 80015a0:	460b      	mov	r3, r1
+ 80015a2:	f04f 3033 	mov.w	r0, #858993459	@ 0x33333333
+ 80015a6:	496f      	ldr	r1, [pc, #444]	@ (8001764 <bms_ic_read_voltage+0x2a4>)
+ 80015a8:	f7fe fe4a 	bl	8000240 <__aeabi_dsub>
+ 80015ac:	4602      	mov	r2, r0
+ 80015ae:	460b      	mov	r3, r1
+ 80015b0:	4610      	mov	r0, r2
+ 80015b2:	4619      	mov	r1, r3
+ 80015b4:	a364      	add	r3, pc, #400	@ (adr r3, 8001748 <bms_ic_read_voltage+0x288>)
+ 80015b6:	e9d3 2300 	ldrd	r2, r3, [r3]
+ 80015ba:	f7ff f923 	bl	8000804 <__aeabi_ddiv>
+ 80015be:	4602      	mov	r2, r0
+ 80015c0:	460b      	mov	r3, r1
+ 80015c2:	4610      	mov	r0, r2
+ 80015c4:	4619      	mov	r1, r3
+ 80015c6:	f04f 0200 	mov.w	r2, #0
+ 80015ca:	4b67      	ldr	r3, [pc, #412]	@ (8001768 <bms_ic_read_voltage+0x2a8>)
+ 80015cc:	f7fe fff0 	bl	80005b0 <__aeabi_dmul>
+ 80015d0:	4602      	mov	r2, r0
+ 80015d2:	460b      	mov	r3, r1
+ 80015d4:	4610      	mov	r0, r2
+ 80015d6:	4619      	mov	r1, r3
+ 80015d8:	f7ff fac2 	bl	8000b60 <__aeabi_d2uiz>
+ 80015dc:	4603      	mov	r3, r0
+ 80015de:	b299      	uxth	r1, r3
+ 80015e0:	687b      	ldr	r3, [r7, #4]
+ 80015e2:	69fa      	ldr	r2, [r7, #28]
+ 80015e4:	f823 1012 	strh.w	r1, [r3, r2, lsl #1]
 	for(int i=0; i<6; i++){
- 80015e6:	69fb      	ldr	r3, [r7, #28]
- 80015e8:	3301      	adds	r3, #1
- 80015ea:	61fb      	str	r3, [r7, #28]
- 80015ec:	69fb      	ldr	r3, [r7, #28]
- 80015ee:	2b05      	cmp	r3, #5
- 80015f0:	dd89      	ble.n	8001506 <bms_ic_read_voltage+0x46>
+ 80015e8:	69fb      	ldr	r3, [r7, #28]
+ 80015ea:	3301      	adds	r3, #1
+ 80015ec:	61fb      	str	r3, [r7, #28]
+ 80015ee:	69fb      	ldr	r3, [r7, #28]
+ 80015f0:	2b05      	cmp	r3, #5
+ 80015f2:	dd88      	ble.n	8001506 <bms_ic_read_voltage+0x46>
 	}
 
 	// Turns on BAT to ADC
 	HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &BAT,1,100);
- 80015f2:	2303      	movs	r3, #3
- 80015f4:	461a      	mov	r2, r3
- 80015f6:	2364      	movs	r3, #100	@ 0x64
- 80015f8:	9302      	str	r3, [sp, #8]
- 80015fa:	2301      	movs	r3, #1
- 80015fc:	9301      	str	r3, [sp, #4]
- 80015fe:	4b5b      	ldr	r3, [pc, #364]	@ (800176c <bms_ic_read_voltage+0x2ac>)
- 8001600:	9300      	str	r3, [sp, #0]
- 8001602:	2301      	movs	r3, #1
- 8001604:	2120      	movs	r1, #32
- 8001606:	4854      	ldr	r0, [pc, #336]	@ (8001758 <bms_ic_read_voltage+0x298>)
- 8001608:	f002 ffe0 	bl	80045cc <HAL_I2C_Mem_Write>
+ 80015f4:	2303      	movs	r3, #3
+ 80015f6:	461a      	mov	r2, r3
+ 80015f8:	2364      	movs	r3, #100	@ 0x64
+ 80015fa:	9302      	str	r3, [sp, #8]
+ 80015fc:	2301      	movs	r3, #1
+ 80015fe:	9301      	str	r3, [sp, #4]
+ 8001600:	4b5a      	ldr	r3, [pc, #360]	@ (800176c <bms_ic_read_voltage+0x2ac>)
+ 8001602:	9300      	str	r3, [sp, #0]
+ 8001604:	2301      	movs	r3, #1
+ 8001606:	2120      	movs	r1, #32
+ 8001608:	4853      	ldr	r0, [pc, #332]	@ (8001758 <bms_ic_read_voltage+0x298>)
+ 800160a:	f002 ffdf 	bl	80045cc <HAL_I2C_Mem_Write>
 	HAL_Delay(1);
- 800160c:	2001      	movs	r0, #1
- 800160e:	f001 f9d1 	bl	80029b4 <HAL_Delay>
+ 800160e:	2001      	movs	r0, #1
+ 8001610:	f001 f9d0 	bl	80029b4 <HAL_Delay>
 	//ADC reading, this is represent in (1/100)V
 	HAL_ADC_Start(&hadc1);
- 8001612:	484f      	ldr	r0, [pc, #316]	@ (8001750 <bms_ic_read_voltage+0x290>)
- 8001614:	f001 faca 	bl	8002bac <HAL_ADC_Start>
+ 8001614:	484e      	ldr	r0, [pc, #312]	@ (8001750 <bms_ic_read_voltage+0x290>)
+ 8001616:	f001 fac9 	bl	8002bac <HAL_ADC_Start>
 	HAL_ADC_PollForConversion(&hadc1, 100);
- 8001618:	2164      	movs	r1, #100	@ 0x64
- 800161a:	484d      	ldr	r0, [pc, #308]	@ (8001750 <bms_ic_read_voltage+0x290>)
- 800161c:	f001 fba0 	bl	8002d60 <HAL_ADC_PollForConversion>
+ 800161a:	2164      	movs	r1, #100	@ 0x64
+ 800161c:	484c      	ldr	r0, [pc, #304]	@ (8001750 <bms_ic_read_voltage+0x290>)
+ 800161e:	f001 fb9f 	bl	8002d60 <HAL_ADC_PollForConversion>
 	adc_val = HAL_ADC_GetValue(&hadc1);
- 8001620:	484b      	ldr	r0, [pc, #300]	@ (8001750 <bms_ic_read_voltage+0x290>)
- 8001622:	f001 fca3 	bl	8002f6c <HAL_ADC_GetValue>
- 8001626:	4603      	mov	r3, r0
- 8001628:	4618      	mov	r0, r3
- 800162a:	f7ff fbbf 	bl	8000dac <__aeabi_ui2f>
- 800162e:	4603      	mov	r3, r0
- 8001630:	4a4a      	ldr	r2, [pc, #296]	@ (800175c <bms_ic_read_voltage+0x29c>)
- 8001632:	6013      	str	r3, [r2, #0]
+ 8001622:	484b      	ldr	r0, [pc, #300]	@ (8001750 <bms_ic_read_voltage+0x290>)
+ 8001624:	f001 fca2 	bl	8002f6c <HAL_ADC_GetValue>
+ 8001628:	4603      	mov	r3, r0
+ 800162a:	4618      	mov	r0, r3
+ 800162c:	f7ff fbbe 	bl	8000dac <__aeabi_ui2f>
+ 8001630:	4603      	mov	r3, r0
+ 8001632:	4a4a      	ldr	r2, [pc, #296]	@ (800175c <bms_ic_read_voltage+0x29c>)
+ 8001634:	6013      	str	r3, [r2, #0]
 	vadc = (adc_val * 3.3) / 4095.0;
- 8001634:	4b49      	ldr	r3, [pc, #292]	@ (800175c <bms_ic_read_voltage+0x29c>)
- 8001636:	681b      	ldr	r3, [r3, #0]
- 8001638:	4618      	mov	r0, r3
- 800163a:	f7fe ff61 	bl	8000500 <__aeabi_f2d>
- 800163e:	a33e      	add	r3, pc, #248	@ (adr r3, 8001738 <bms_ic_read_voltage+0x278>)
- 8001640:	e9d3 2300 	ldrd	r2, r3, [r3]
- 8001644:	f7fe ffb4 	bl	80005b0 <__aeabi_dmul>
- 8001648:	4602      	mov	r2, r0
- 800164a:	460b      	mov	r3, r1
- 800164c:	4610      	mov	r0, r2
- 800164e:	4619      	mov	r1, r3
- 8001650:	a33b      	add	r3, pc, #236	@ (adr r3, 8001740 <bms_ic_read_voltage+0x280>)
- 8001652:	e9d3 2300 	ldrd	r2, r3, [r3]
- 8001656:	f7ff f8d5 	bl	8000804 <__aeabi_ddiv>
- 800165a:	4602      	mov	r2, r0
- 800165c:	460b      	mov	r3, r1
- 800165e:	4610      	mov	r0, r2
- 8001660:	4619      	mov	r1, r3
- 8001662:	f7ff fa9d 	bl	8000ba0 <__aeabi_d2f>
- 8001666:	4603      	mov	r3, r0
- 8001668:	4a3d      	ldr	r2, [pc, #244]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
- 800166a:	6013      	str	r3, [r2, #0]
+ 8001636:	4b49      	ldr	r3, [pc, #292]	@ (800175c <bms_ic_read_voltage+0x29c>)
+ 8001638:	681b      	ldr	r3, [r3, #0]
+ 800163a:	4618      	mov	r0, r3
+ 800163c:	f7fe ff60 	bl	8000500 <__aeabi_f2d>
+ 8001640:	a33d      	add	r3, pc, #244	@ (adr r3, 8001738 <bms_ic_read_voltage+0x278>)
+ 8001642:	e9d3 2300 	ldrd	r2, r3, [r3]
+ 8001646:	f7fe ffb3 	bl	80005b0 <__aeabi_dmul>
+ 800164a:	4602      	mov	r2, r0
+ 800164c:	460b      	mov	r3, r1
+ 800164e:	4610      	mov	r0, r2
+ 8001650:	4619      	mov	r1, r3
+ 8001652:	a33b      	add	r3, pc, #236	@ (adr r3, 8001740 <bms_ic_read_voltage+0x280>)
+ 8001654:	e9d3 2300 	ldrd	r2, r3, [r3]
+ 8001658:	f7ff f8d4 	bl	8000804 <__aeabi_ddiv>
+ 800165c:	4602      	mov	r2, r0
+ 800165e:	460b      	mov	r3, r1
+ 8001660:	4610      	mov	r0, r2
+ 8001662:	4619      	mov	r1, r3
+ 8001664:	f7ff fa9c 	bl	8000ba0 <__aeabi_d2f>
+ 8001668:	4603      	mov	r3, r0
+ 800166a:	4a3d      	ldr	r2, [pc, #244]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
+ 800166c:	6013      	str	r3, [r2, #0]
 	b->cell_volt_sum = (vadc * 100 / 50);
- 800166c:	4b3c      	ldr	r3, [pc, #240]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
- 800166e:	681b      	ldr	r3, [r3, #0]
- 8001670:	493f      	ldr	r1, [pc, #252]	@ (8001770 <bms_ic_read_voltage+0x2b0>)
- 8001672:	4618      	mov	r0, r3
- 8001674:	f7ff fbf2 	bl	8000e5c <__aeabi_fmul>
- 8001678:	4603      	mov	r3, r0
- 800167a:	493e      	ldr	r1, [pc, #248]	@ (8001774 <bms_ic_read_voltage+0x2b4>)
- 800167c:	4618      	mov	r0, r3
- 800167e:	f7ff fca1 	bl	8000fc4 <__aeabi_fdiv>
- 8001682:	4603      	mov	r3, r0
- 8001684:	4618      	mov	r0, r3
- 8001686:	f7ff fd39 	bl	80010fc <__aeabi_f2uiz>
- 800168a:	4603      	mov	r3, r0
- 800168c:	b29a      	uxth	r2, r3
- 800168e:	687b      	ldr	r3, [r7, #4]
- 8001690:	82da      	strh	r2, [r3, #22]
+ 800166e:	4b3c      	ldr	r3, [pc, #240]	@ (8001760 <bms_ic_read_voltage+0x2a0>)
+ 8001670:	681b      	ldr	r3, [r3, #0]
+ 8001672:	493f      	ldr	r1, [pc, #252]	@ (8001770 <bms_ic_read_voltage+0x2b0>)
+ 8001674:	4618      	mov	r0, r3
+ 8001676:	f7ff fbf1 	bl	8000e5c <__aeabi_fmul>
+ 800167a:	4603      	mov	r3, r0
+ 800167c:	493d      	ldr	r1, [pc, #244]	@ (8001774 <bms_ic_read_voltage+0x2b4>)
+ 800167e:	4618      	mov	r0, r3
+ 8001680:	f7ff fca0 	bl	8000fc4 <__aeabi_fdiv>
+ 8001684:	4603      	mov	r3, r0
+ 8001686:	4618      	mov	r0, r3
+ 8001688:	f7ff fd38 	bl	80010fc <__aeabi_f2uiz>
+ 800168c:	4603      	mov	r3, r0
+ 800168e:	b29a      	uxth	r2, r3
+ 8001690:	687b      	ldr	r3, [r7, #4]
+ 8001692:	82da      	strh	r2, [r3, #22]
 	HAL_ADC_Stop(&hadc1);
- 8001692:	482f      	ldr	r0, [pc, #188]	@ (8001750 <bms_ic_read_voltage+0x290>)
- 8001694:	f001 fb38 	bl	8002d08 <HAL_ADC_Stop>
+ 8001694:	482e      	ldr	r0, [pc, #184]	@ (8001750 <bms_ic_read_voltage+0x290>)
+ 8001696:	f001 fb37 	bl	8002d08 <HAL_ADC_Stop>
 	// Turns off Pack to ADC
 	HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
- 8001698:	2303      	movs	r3, #3
- 800169a:	461a      	mov	r2, r3
- 800169c:	2364      	movs	r3, #100	@ 0x64
- 800169e:	9302      	str	r3, [sp, #8]
- 80016a0:	2301      	movs	r3, #1
- 80016a2:	9301      	str	r3, [sp, #4]
- 80016a4:	4b34      	ldr	r3, [pc, #208]	@ (8001778 <bms_ic_read_voltage+0x2b8>)
- 80016a6:	9300      	str	r3, [sp, #0]
- 80016a8:	2301      	movs	r3, #1
- 80016aa:	2120      	movs	r1, #32
- 80016ac:	482a      	ldr	r0, [pc, #168]	@ (8001758 <bms_ic_read_voltage+0x298>)
- 80016ae:	f002 ff8d 	bl	80045cc <HAL_I2C_Mem_Write>
+ 800169a:	2303      	movs	r3, #3
+ 800169c:	461a      	mov	r2, r3
+ 800169e:	2364      	movs	r3, #100	@ 0x64
+ 80016a0:	9302      	str	r3, [sp, #8]
+ 80016a2:	2301      	movs	r3, #1
+ 80016a4:	9301      	str	r3, [sp, #4]
+ 80016a6:	4b34      	ldr	r3, [pc, #208]	@ (8001778 <bms_ic_read_voltage+0x2b8>)
+ 80016a8:	9300      	str	r3, [sp, #0]
+ 80016aa:	2301      	movs	r3, #1
+ 80016ac:	2120      	movs	r1, #32
+ 80016ae:	482a      	ldr	r0, [pc, #168]	@ (8001758 <bms_ic_read_voltage+0x298>)
+ 80016b0:	f002 ff8c 	bl	80045cc <HAL_I2C_Mem_Write>
 
 	//Now find highest, lowest, diff, and avg
 	for(int i=0; i<NUM_CELLS; i++){
- 80016b2:	2300      	movs	r3, #0
- 80016b4:	61bb      	str	r3, [r7, #24]
- 80016b6:	e022      	b.n	80016fe <bms_ic_read_voltage+0x23e>
+ 80016b4:	2300      	movs	r3, #0
+ 80016b6:	61bb      	str	r3, [r7, #24]
+ 80016b8:	e022      	b.n	8001700 <bms_ic_read_voltage+0x240>
 		if(b->voltage_buffer[i] > highest){
- 80016b8:	687b      	ldr	r3, [r7, #4]
- 80016ba:	69ba      	ldr	r2, [r7, #24]
- 80016bc:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
- 80016c0:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
- 80016c2:	429a      	cmp	r2, r3
- 80016c4:	d205      	bcs.n	80016d2 <bms_ic_read_voltage+0x212>
+ 80016ba:	687b      	ldr	r3, [r7, #4]
+ 80016bc:	69ba      	ldr	r2, [r7, #24]
+ 80016be:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
+ 80016c2:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
+ 80016c4:	429a      	cmp	r2, r3
+ 80016c6:	d205      	bcs.n	80016d4 <bms_ic_read_voltage+0x214>
 			highest = b->voltage_buffer[i];
- 80016c6:	687b      	ldr	r3, [r7, #4]
- 80016c8:	69ba      	ldr	r2, [r7, #24]
- 80016ca:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
- 80016ce:	84fb      	strh	r3, [r7, #38]	@ 0x26
- 80016d0:	e00b      	b.n	80016ea <bms_ic_read_voltage+0x22a>
+ 80016c8:	687b      	ldr	r3, [r7, #4]
+ 80016ca:	69ba      	ldr	r2, [r7, #24]
+ 80016cc:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
+ 80016d0:	84fb      	strh	r3, [r7, #38]	@ 0x26
+ 80016d2:	e00b      	b.n	80016ec <bms_ic_read_voltage+0x22c>
 		}
 		else if(b->voltage_buffer[i] < lowest){
- 80016d2:	687b      	ldr	r3, [r7, #4]
- 80016d4:	69ba      	ldr	r2, [r7, #24]
- 80016d6:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
- 80016da:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
- 80016dc:	429a      	cmp	r2, r3
- 80016de:	d904      	bls.n	80016ea <bms_ic_read_voltage+0x22a>
+ 80016d4:	687b      	ldr	r3, [r7, #4]
+ 80016d6:	69ba      	ldr	r2, [r7, #24]
+ 80016d8:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
+ 80016dc:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
+ 80016de:	429a      	cmp	r2, r3
+ 80016e0:	d904      	bls.n	80016ec <bms_ic_read_voltage+0x22c>
 			lowest = b->voltage_buffer[i];
- 80016e0:	687b      	ldr	r3, [r7, #4]
- 80016e2:	69ba      	ldr	r2, [r7, #24]
- 80016e4:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
- 80016e8:	84bb      	strh	r3, [r7, #36]	@ 0x24
+ 80016e2:	687b      	ldr	r3, [r7, #4]
+ 80016e4:	69ba      	ldr	r2, [r7, #24]
+ 80016e6:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
+ 80016ea:	84bb      	strh	r3, [r7, #36]	@ 0x24
 		}
 		sum += b->voltage_buffer[i];
- 80016ea:	687b      	ldr	r3, [r7, #4]
- 80016ec:	69ba      	ldr	r2, [r7, #24]
- 80016ee:	f833 2012 	ldrh.w	r2, [r3, r2, lsl #1]
- 80016f2:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
- 80016f4:	4413      	add	r3, r2
- 80016f6:	847b      	strh	r3, [r7, #34]	@ 0x22
+ 80016ec:	687b      	ldr	r3, [r7, #4]
+ 80016ee:	69ba      	ldr	r2, [r7, #24]
+ 80016f0:	f833 2012 	ldrh.w	r2, [r3, r2, lsl #1]
+ 80016f4:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
+ 80016f6:	4413      	add	r3, r2
+ 80016f8:	847b      	strh	r3, [r7, #34]	@ 0x22
 	for(int i=0; i<NUM_CELLS; i++){
- 80016f8:	69bb      	ldr	r3, [r7, #24]
- 80016fa:	3301      	adds	r3, #1
- 80016fc:	61bb      	str	r3, [r7, #24]
- 80016fe:	69bb      	ldr	r3, [r7, #24]
- 8001700:	2b05      	cmp	r3, #5
- 8001702:	ddd9      	ble.n	80016b8 <bms_ic_read_voltage+0x1f8>
+ 80016fa:	69bb      	ldr	r3, [r7, #24]
+ 80016fc:	3301      	adds	r3, #1
+ 80016fe:	61bb      	str	r3, [r7, #24]
+ 8001700:	69bb      	ldr	r3, [r7, #24]
+ 8001702:	2b05      	cmp	r3, #5
+ 8001704:	ddd9      	ble.n	80016ba <bms_ic_read_voltage+0x1fa>
 	}
 	b->cell_volt_highest = highest;
- 8001704:	687b      	ldr	r3, [r7, #4]
- 8001706:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
- 8001708:	821a      	strh	r2, [r3, #16]
+ 8001706:	687b      	ldr	r3, [r7, #4]
+ 8001708:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
+ 800170a:	821a      	strh	r2, [r3, #16]
 	b->cell_volt_lowest = lowest;
- 800170a:	687b      	ldr	r3, [r7, #4]
- 800170c:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
- 800170e:	81da      	strh	r2, [r3, #14]
+ 800170c:	687b      	ldr	r3, [r7, #4]
+ 800170e:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
+ 8001710:	81da      	strh	r2, [r3, #14]
 	b->cell_volt_diff = highest - lowest;
- 8001710:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
- 8001712:	8cbb      	ldrh	r3, [r7, #36]	@ 0x24
- 8001714:	1ad3      	subs	r3, r2, r3
- 8001716:	b29a      	uxth	r2, r3
- 8001718:	687b      	ldr	r3, [r7, #4]
- 800171a:	829a      	strh	r2, [r3, #20]
+ 8001712:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
+ 8001714:	8cbb      	ldrh	r3, [r7, #36]	@ 0x24
+ 8001716:	1ad3      	subs	r3, r2, r3
+ 8001718:	b29a      	uxth	r2, r3
+ 800171a:	687b      	ldr	r3, [r7, #4]
+ 800171c:	829a      	strh	r2, [r3, #20]
 	b->cell_volt_avg = sum/NUM_CELLS;
- 800171c:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
- 800171e:	4a17      	ldr	r2, [pc, #92]	@ (800177c <bms_ic_read_voltage+0x2bc>)
- 8001720:	fba2 2303 	umull	r2, r3, r2, r3
- 8001724:	089b      	lsrs	r3, r3, #2
- 8001726:	b29a      	uxth	r2, r3
- 8001728:	687b      	ldr	r3, [r7, #4]
- 800172a:	825a      	strh	r2, [r3, #18]
+ 800171e:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
+ 8001720:	4a16      	ldr	r2, [pc, #88]	@ (800177c <bms_ic_read_voltage+0x2bc>)
+ 8001722:	fba2 2303 	umull	r2, r3, r2, r3
+ 8001726:	089b      	lsrs	r3, r3, #2
+ 8001728:	b29a      	uxth	r2, r3
+ 800172a:	687b      	ldr	r3, [r7, #4]
+ 800172c:	825a      	strh	r2, [r3, #18]
 
 }
- 800172c:	bf00      	nop
- 800172e:	3728      	adds	r7, #40	@ 0x28
- 8001730:	46bd      	mov	sp, r7
- 8001732:	bd80      	pop	{r7, pc}
- 8001734:	f3af 8000 	nop.w
+ 800172e:	bf00      	nop
+ 8001730:	3728      	adds	r7, #40	@ 0x28
+ 8001732:	46bd      	mov	sp, r7
+ 8001734:	bd80      	pop	{r7, pc}
+ 8001736:	bf00      	nop
  8001738:	66666666 	.word	0x66666666
  800173c:	400a6666 	.word	0x400a6666
  8001740:	00000000 	.word	0x00000000
@@ -2635,11 +2636,11 @@ void bms_ic_eeprom_check(){
  8001c44:	080098e0 	.word	0x080098e0
 
 08001c48 <can_send>:
-
-#include "main.h"
 #include "CAN.h"
 
-/*This functions load the batt_info to the CAN message and load to send*/
+/*This functions load the batt_info to the CAN message and load to send
+ *Since each CAN frame is 8-bit and only LSB are consider
+ *16-bit data must be separate into two 8-bit*/
 void can_send(batt_info_t *b, can_id_lookup_t *id, can_message_t *m){
  8001c48:	b580      	push	{r7, lr}
  8001c4a:	b08a      	sub	sp, #40	@ 0x28
@@ -2648,20 +2649,20 @@ void can_send(batt_info_t *b, can_id_lookup_t *id, can_message_t *m){
  8001c50:	60b9      	str	r1, [r7, #8]
  8001c52:	607a      	str	r2, [r7, #4]
 	//Load cell voltages 0-3 to CAN data
-	m->can_data[1] = (uint8_t) (b->voltage_buffer[0] >> 8);
+	m->can_data[0] = (uint8_t) (b->voltage_buffer[0]);
  8001c54:	68fb      	ldr	r3, [r7, #12]
  8001c56:	881b      	ldrh	r3, [r3, #0]
- 8001c58:	0a1b      	lsrs	r3, r3, #8
- 8001c5a:	b29b      	uxth	r3, r3
- 8001c5c:	b2da      	uxtb	r2, r3
- 8001c5e:	687b      	ldr	r3, [r7, #4]
- 8001c60:	765a      	strb	r2, [r3, #25]
-	m->can_data[0] = (uint8_t) (b->voltage_buffer[0]);
- 8001c62:	68fb      	ldr	r3, [r7, #12]
- 8001c64:	881b      	ldrh	r3, [r3, #0]
+ 8001c58:	b2da      	uxtb	r2, r3
+ 8001c5a:	687b      	ldr	r3, [r7, #4]
+ 8001c5c:	761a      	strb	r2, [r3, #24]
+	m->can_data[1] = (uint8_t) (b->voltage_buffer[0] >> 8);
+ 8001c5e:	68fb      	ldr	r3, [r7, #12]
+ 8001c60:	881b      	ldrh	r3, [r3, #0]
+ 8001c62:	0a1b      	lsrs	r3, r3, #8
+ 8001c64:	b29b      	uxth	r3, r3
  8001c66:	b2da      	uxtb	r2, r3
  8001c68:	687b      	ldr	r3, [r7, #4]
- 8001c6a:	761a      	strb	r2, [r3, #24]
+ 8001c6a:	765a      	strb	r2, [r3, #25]
 	m->can_data[2] = (uint8_t) (b->voltage_buffer[1]);
  8001c6c:	68fb      	ldr	r3, [r7, #12]
  8001c6e:	885b      	ldrh	r3, [r3, #2]

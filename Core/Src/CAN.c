@@ -4,11 +4,13 @@
 #include "main.h"
 #include "CAN.h"
 
-/*This functions load the batt_info to the CAN message and load to send*/
+/*This functions load the batt_info to the CAN message and load to send
+ *Since each CAN frame is 8-bit and only LSB are consider
+ *16-bit data must be separate into two 8-bit*/
 void can_send(batt_info_t *b, can_id_lookup_t *id, can_message_t *m){
 	//Load cell voltages 0-3 to CAN data
-	m->can_data[1] = (uint8_t) (b->voltage_buffer[0] >> 8);
 	m->can_data[0] = (uint8_t) (b->voltage_buffer[0]);
+	m->can_data[1] = (uint8_t) (b->voltage_buffer[0] >> 8);
 	m->can_data[2] = (uint8_t) (b->voltage_buffer[1]);
 	m->can_data[3] = (uint8_t) (b->voltage_buffer[1] >> 8);
 	m->can_data[4] = (uint8_t) (b->voltage_buffer[2]);

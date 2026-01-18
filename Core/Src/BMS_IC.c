@@ -44,7 +44,7 @@ void bms_ic_read_voltage(batt_info_t *b){
 
 	for(int i=0; i<6; i++){
 		// Send I2C command to switch cell reading to ADC pin
-		HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i],1,100);
+		HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i+4],1,100);
 		HAL_Delay(1);
 		//ADC reading
 		HAL_ADC_Start(&hadc1);

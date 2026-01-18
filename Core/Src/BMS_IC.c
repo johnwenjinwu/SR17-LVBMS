@@ -34,6 +34,7 @@ void bms_ic_host_control_EN(){
 
 //This function reads cell voltages and pack voltage and represents in mV
 void bms_ic_read_voltage(batt_info_t *b){
+	uint16_t highest = 0, lowest = 0, diff = 0, avg = 0, sum = 0;
 
 	ADC_ChannelConfTypeDef sConfig = {0};
 	sConfig.Channel = ADC_CHANNEL_0;
@@ -42,28 +43,45 @@ void bms_ic_read_voltage(batt_info_t *b){
 	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
 	for(int i=0; i<6; i++){
-		  // Send I2C command to switch cell reading to ADC pin
-		  HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i],1,100);
-		  HAL_Delay(1);
-		  //ADC reading
-		  HAL_ADC_Start(&hadc1);
-		  HAL_ADC_PollForConversion(&hadc1, 100);
-		  adc_val = HAL_ADC_GetValue(&hadc1);
-		  vadc = (adc_val * 3.3) / 4095.0;
-		  b->voltage_buffer[i] = (1000 * ((1.2 - (vadc + 0)) / 0.2));
-	  }
-	  // Turns on BAT to ADC
-	  HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &BAT,1,100);
-	  HAL_Delay(1);
-	  //ADC reading, this is represent in (1/100)V
-	  HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, 100);
-	  adc_val = HAL_ADC_GetValue(&hadc1);
-	  vadc = (adc_val * 3.3) / 4095.0;
-	  b->cell_volt_sum = (vadc * 100 / 50);
-	  HAL_ADC_Stop(&hadc1);
-	  // Turns off Pack to ADC
-	  HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
+		// Send I2C command to switch cell reading to ADC pin
+		HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, cell_sel_reg, I2C_MEMADD_SIZE_8BIT, &CELL_Voltage[i],1,100);
+		HAL_Delay(1);
+		//ADC reading
+		HAL_ADC_Start(&hadc1);
+		HAL_ADC_PollForConversion(&hadc1, 100);
+		adc_val = HAL_ADC_GetValue(&hadc1);
+		vadc = (adc_val * 3.3) / 4095.0;
+		b->voltage_buffer[i] = (1000 * ((1.2 - (vadc + 0)) / 0.2));
+	}
+
+	// Turns on BAT to ADC
+	HAL_I2C_Mem_Write(&hi2c1,BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &BAT,1,100);
+	HAL_Delay(1);
+	//ADC reading, this is represent in (1/100)V
+	HAL_ADC_Start(&hadc1);
+	HAL_ADC_PollForConversion(&hadc1, 100);
+	adc_val = HAL_ADC_GetValue(&hadc1);
+	vadc = (adc_val * 3.3) / 4095.0;
+	b->cell_volt_sum = (vadc * 100 / 50);
+	HAL_ADC_Stop(&hadc1);
+	// Turns off Pack to ADC
+	HAL_I2C_Mem_Write(&hi2c1, BMS_ADDR, function_control_reg, I2C_MEMADD_SIZE_8BIT, &ADC_EN,1,100);
+
+	//Now find highest, lowest, diff, and avg
+	for(int i=0; i<NUM_CELLS; i++){
+		if(b->voltage_buffer[i] > highest){
+			highest = b->voltage_buffer[i];
+		}
+		else if(b->voltage_buffer[i] < lowest){
+			lowest = b->voltage_buffer[i];
+		}
+		sum += b->voltage_buffer[i];
+	}
+	b->cell_volt_highest = highest;
+	b->cell_volt_lowest = lowest;
+	b->cell_volt_diff = highest - lowest;
+	b->cell_volt_avg = sum/NUM_CELLS;
+
 }
 
 //This function reads current represents in mA

@@ -6,6 +6,7 @@
 #include "BMS_IC.h"
 
 extern CAN_HandleTypeDef hcan1;
+extern uint8_t cell_balance_reg;
 
 //create a lookup table struct for CAN id
 typedef struct can_id_lookup_t{

@@ -44,8 +44,20 @@ void can_send(batt_info_t *b, can_id_lookup_t *id, can_message_t *m){
 	//Set CAN ID for message 3
 	m->tx_header.StdId = id->bms_message_3_id;
 	can_real_send(m);
-
 	
+	//Load cell ID for temperature + fault info + balancing status
+	uint8_t balance;
+	m->can_data[0] = (uint8_t) (b->temp_buffer);
+	m->can_data[1] = (uint8_t) (b->fault_info);
+	m->can_data[2] = (uint8_t) (HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, cell_balance_reg, I2C_MEMADD_SIZE_8BIT, &balance, sizeof(uint8_t), 100));
+	m->can_data[3] = 0;
+	m->can_data[4] = 0;
+	m->can_data[5] = 0;
+	m->can_data[6] = 0;
+	m->can_data[7] = 0;
+	//Set CAN ID for message 3
+	m->tx_header.StdId = id->bms_message_4_id;
+	can_real_send(m);
 }
 
 void can_real_send(can_message_t *m){

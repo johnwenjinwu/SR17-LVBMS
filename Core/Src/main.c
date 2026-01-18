@@ -119,7 +119,7 @@ int main(void)
 		  .bms_message_1_id = 666,
 		  .bms_message_2_id = 667,
 		  .bms_message_3_id = 668,
-		  .bms_message_4_id = 669
+		  .bms_message_4_id = 669,
   };
   batt_info_t batt_info ={
 		  .voltage_buffer = {0},

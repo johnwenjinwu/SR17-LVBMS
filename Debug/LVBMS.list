@@ -1973,78 +1973,78 @@ void bms_ic_read_voltage(batt_info_t *b){
 	for(int i=0; i<NUM_CELLS; i++){
  80016b6:	2300      	movs	r3, #0
  80016b8:	61bb      	str	r3, [r7, #24]
- 80016ba:	e022      	b.n	8001702 <bms_ic_read_voltage+0x242>
+ 80016ba:	e021      	b.n	8001700 <bms_ic_read_voltage+0x240>
 		if(b->voltage_buffer[i] > highest){
  80016bc:	687b      	ldr	r3, [r7, #4]
  80016be:	69ba      	ldr	r2, [r7, #24]
  80016c0:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
  80016c4:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
  80016c6:	429a      	cmp	r2, r3
- 80016c8:	d205      	bcs.n	80016d6 <bms_ic_read_voltage+0x216>
+ 80016c8:	d204      	bcs.n	80016d4 <bms_ic_read_voltage+0x214>
 			highest = b->voltage_buffer[i];
  80016ca:	687b      	ldr	r3, [r7, #4]
  80016cc:	69ba      	ldr	r2, [r7, #24]
  80016ce:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
  80016d2:	84fb      	strh	r3, [r7, #38]	@ 0x26
- 80016d4:	e00b      	b.n	80016ee <bms_ic_read_voltage+0x22e>
 		}
-		else if(b->voltage_buffer[i] < lowest){
- 80016d6:	687b      	ldr	r3, [r7, #4]
- 80016d8:	69ba      	ldr	r2, [r7, #24]
- 80016da:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
- 80016de:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
- 80016e0:	429a      	cmp	r2, r3
- 80016e2:	d904      	bls.n	80016ee <bms_ic_read_voltage+0x22e>
+		if(b->voltage_buffer[i] < lowest){
+ 80016d4:	687b      	ldr	r3, [r7, #4]
+ 80016d6:	69ba      	ldr	r2, [r7, #24]
+ 80016d8:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
+ 80016dc:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
+ 80016de:	429a      	cmp	r2, r3
+ 80016e0:	d904      	bls.n	80016ec <bms_ic_read_voltage+0x22c>
 			lowest = b->voltage_buffer[i];
- 80016e4:	687b      	ldr	r3, [r7, #4]
- 80016e6:	69ba      	ldr	r2, [r7, #24]
- 80016e8:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
- 80016ec:	84bb      	strh	r3, [r7, #36]	@ 0x24
+ 80016e2:	687b      	ldr	r3, [r7, #4]
+ 80016e4:	69ba      	ldr	r2, [r7, #24]
+ 80016e6:	f833 3012 	ldrh.w	r3, [r3, r2, lsl #1]
+ 80016ea:	84bb      	strh	r3, [r7, #36]	@ 0x24
 		}
 		sum += b->voltage_buffer[i];
- 80016ee:	687b      	ldr	r3, [r7, #4]
- 80016f0:	69ba      	ldr	r2, [r7, #24]
- 80016f2:	f833 2012 	ldrh.w	r2, [r3, r2, lsl #1]
- 80016f6:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
- 80016f8:	4413      	add	r3, r2
- 80016fa:	847b      	strh	r3, [r7, #34]	@ 0x22
+ 80016ec:	687b      	ldr	r3, [r7, #4]
+ 80016ee:	69ba      	ldr	r2, [r7, #24]
+ 80016f0:	f833 2012 	ldrh.w	r2, [r3, r2, lsl #1]
+ 80016f4:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
+ 80016f6:	4413      	add	r3, r2
+ 80016f8:	847b      	strh	r3, [r7, #34]	@ 0x22
 	for(int i=0; i<NUM_CELLS; i++){
- 80016fc:	69bb      	ldr	r3, [r7, #24]
- 80016fe:	3301      	adds	r3, #1
- 8001700:	61bb      	str	r3, [r7, #24]
- 8001702:	69bb      	ldr	r3, [r7, #24]
- 8001704:	2b05      	cmp	r3, #5
- 8001706:	ddd9      	ble.n	80016bc <bms_ic_read_voltage+0x1fc>
+ 80016fa:	69bb      	ldr	r3, [r7, #24]
+ 80016fc:	3301      	adds	r3, #1
+ 80016fe:	61bb      	str	r3, [r7, #24]
+ 8001700:	69bb      	ldr	r3, [r7, #24]
+ 8001702:	2b05      	cmp	r3, #5
+ 8001704:	ddda      	ble.n	80016bc <bms_ic_read_voltage+0x1fc>
 	}
 	b->cell_volt_highest = highest;
- 8001708:	687b      	ldr	r3, [r7, #4]
- 800170a:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
- 800170c:	821a      	strh	r2, [r3, #16]
+ 8001706:	687b      	ldr	r3, [r7, #4]
+ 8001708:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
+ 800170a:	821a      	strh	r2, [r3, #16]
 	b->cell_volt_lowest = lowest;
- 800170e:	687b      	ldr	r3, [r7, #4]
- 8001710:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
- 8001712:	81da      	strh	r2, [r3, #14]
+ 800170c:	687b      	ldr	r3, [r7, #4]
+ 800170e:	8cba      	ldrh	r2, [r7, #36]	@ 0x24
+ 8001710:	81da      	strh	r2, [r3, #14]
 	b->cell_volt_diff = highest - lowest;
- 8001714:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
- 8001716:	8cbb      	ldrh	r3, [r7, #36]	@ 0x24
- 8001718:	1ad3      	subs	r3, r2, r3
- 800171a:	b29a      	uxth	r2, r3
- 800171c:	687b      	ldr	r3, [r7, #4]
- 800171e:	829a      	strh	r2, [r3, #20]
+ 8001712:	8cfa      	ldrh	r2, [r7, #38]	@ 0x26
+ 8001714:	8cbb      	ldrh	r3, [r7, #36]	@ 0x24
+ 8001716:	1ad3      	subs	r3, r2, r3
+ 8001718:	b29a      	uxth	r2, r3
+ 800171a:	687b      	ldr	r3, [r7, #4]
+ 800171c:	829a      	strh	r2, [r3, #20]
 	b->cell_volt_avg = sum/NUM_CELLS;
- 8001720:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
- 8001722:	4a16      	ldr	r2, [pc, #88]	@ (800177c <bms_ic_read_voltage+0x2bc>)
- 8001724:	fba2 2303 	umull	r2, r3, r2, r3
- 8001728:	089b      	lsrs	r3, r3, #2
- 800172a:	b29a      	uxth	r2, r3
- 800172c:	687b      	ldr	r3, [r7, #4]
- 800172e:	825a      	strh	r2, [r3, #18]
+ 800171e:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
+ 8001720:	4a16      	ldr	r2, [pc, #88]	@ (800177c <bms_ic_read_voltage+0x2bc>)
+ 8001722:	fba2 2303 	umull	r2, r3, r2, r3
+ 8001726:	089b      	lsrs	r3, r3, #2
+ 8001728:	b29a      	uxth	r2, r3
+ 800172a:	687b      	ldr	r3, [r7, #4]
+ 800172c:	825a      	strh	r2, [r3, #18]
 
 }
- 8001730:	bf00      	nop
- 8001732:	3728      	adds	r7, #40	@ 0x28
- 8001734:	46bd      	mov	sp, r7
- 8001736:	bd80      	pop	{r7, pc}
+ 800172e:	bf00      	nop
+ 8001730:	3728      	adds	r7, #40	@ 0x28
+ 8001732:	46bd      	mov	sp, r7
+ 8001734:	bd80      	pop	{r7, pc}
+ 8001736:	bf00      	nop
  8001738:	66666666 	.word	0x66666666
  800173c:	400a6666 	.word	0x400a6666
  8001740:	00000000 	.word	0x00000000

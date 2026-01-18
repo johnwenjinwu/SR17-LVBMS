@@ -72,7 +72,7 @@ void bms_ic_read_voltage(batt_info_t *b){
 		if(b->voltage_buffer[i] > highest){
 			highest = b->voltage_buffer[i];
 		}
-		else if(b->voltage_buffer[i] < lowest){
+		if(b->voltage_buffer[i] < lowest){
 			lowest = b->voltage_buffer[i];
 		}
 		sum += b->voltage_buffer[i];

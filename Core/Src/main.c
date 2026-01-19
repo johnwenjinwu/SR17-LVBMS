@@ -32,7 +32,30 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+ can_message_t can_message = {
+		  .tx_header.StdId = 0,
+		  .tx_header.ExtId = 0,
+		  .tx_header.IDE = CAN_ID_STD,
+		  .tx_header.RTR = CAN_RTR_DATA,
+		  .tx_header.DLC = 8,
+  };
+  can_id_lookup_t can_id_lookup ={
+		  .bms_message_1_id = 666,
+		  .bms_message_2_id = 667,
+		  .bms_message_3_id = 668,
+		  .bms_message_4_id = 669,
+  };
+  batt_info_t batt_info ={
+		  .voltage_buffer = {0},
+		  .temp_buffer = 0,
+		  .cell_volt_avg = 0,
+		  .cell_volt_diff = 0,
+		  .cell_volt_highest = 0,
+		  .cell_volt_lowest = 0,
+		  .cell_volt_sum = 0,
+		  .fault_info = 0,
+  };
+  finite_state_machine_t finite_state_machine;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -48,6 +71,10 @@ CAN_HandleTypeDef hcan1;
 
 I2C_HandleTypeDef hi2c1;
 
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim6;
+
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
@@ -62,12 +89,44 @@ static void MX_ADC1_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_TIM2_Init(void);
+static void MX_TIM3_Init(void);
+static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(htim == &htim2){
+		bms_ic_read_faults(&batt_info);
+		bms_ic_read_voltage(&batt_info);
+		bms_ic_read_current(&batt_info);
+		bms_ic_read_temp(&batt_info);
+	}
+	else if(htim == &htim3){
+		can_send(&batt_info, &can_id_lookup, &can_message);
+	}
+	else if(htim == &htim6){
+		  //If no faults and no discharging(6th bit VGOOD is don't care)
+		  if((batt_info.fault_info == 0b10000000) ||
+			  (batt_info.fault_info == 0b10100000) ||
+			  (batt_info.fault_info == 0b00000000) ||
+			  (batt_info.fault_info == 0b00100000)){
+			  if(batt_info.cell_volt_diff > 20){
+				  finite_state_machine = batt_state_balancing;
+			  }
+			  else if(batt_info.cell_volt_diff < 10){
+				  finite_state_machine = batt_state_charing;
+			  }
+		  }
+		  if(((batt_info.fault_info == 0b00001000)) ||
+			  (batt_info.fault_info == 0b00101000)){
+			  finite_state_machine = batt_state_fault;
+		  }
+	}
+}
 
 /* USER CODE END 0 */
 
@@ -105,35 +164,19 @@ int main(void)
   MX_CAN1_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
+  MX_TIM2_Init();
+  MX_TIM3_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_Base_Start_IT(&htim2);	//50ms for batt_info reading
+  HAL_TIM_Base_Start_IT(&htim3);	//100ms for CAN transmission
+  HAL_TIM_Base_Start_IT(&htim6);	//1s for balancing check
+
   HAL_ADCEx_Calibration_Start(&hadc1);
   HAL_CAN_Start(&hcan1);
-  can_message_t can_message = {
-		  .tx_header.StdId = 0,
-		  .tx_header.ExtId = 0,
-		  .tx_header.IDE = CAN_ID_STD,
-		  .tx_header.RTR = CAN_RTR_DATA,
-		  .tx_header.DLC = 8,
-  };
-  can_id_lookup_t can_id_lookup ={
-		  .bms_message_1_id = 666,
-		  .bms_message_2_id = 667,
-		  .bms_message_3_id = 668,
-		  .bms_message_4_id = 669,
-  };
-  batt_info_t batt_info ={
-		  .voltage_buffer = {0},
-		  .temp_buffer = {0},
-		  .cell_volt_avg = 0,
-		  .cell_volt_diff = 0,
-		  .cell_volt_highest = 0,
-		  .cell_volt_lowest = 0,
-		  .cell_volt_sum = 0,
-		  .fault_info = 0,
-  };
-  char buffer[32];
-  uint32_t tick = 0;
 
+  char buffer[32];
+  uint8_t balance;
   HAL_StatusTypeDef status = HAL_OK;
   bms_ic_host_control_EN();
 
@@ -146,26 +189,28 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  tick = HAL_GetTick();
-	  bms_ic_eeprom_check();
-	  bms_ic_read_faults(&batt_info);
-	  bms_ic_read_voltage(&batt_info);
-	  bms_ic_read_current(&batt_info);
-	  bms_ic_read_temp(&batt_info);
-	  bms_software_protection(&batt_info);
+	  HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, cell_balance_reg, I2C_MEMADD_SIZE_8BIT, &balance, sizeof(uint8_t), 100);
+	  	  		  snprintf(buffer, sizeof(buffer), "uui: %02X \r\n", finite_state_machine);  // or %02X for hex
+	  	  		  //Transmit data thru UART serial monitor
+	  	  		  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+	  switch(finite_state_machine){
+	  case batt_state_standby:
+		  HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, cell_balance_reg, I2C_MEMADD_SIZE_8BIT, &balance, sizeof(uint8_t), 100);
+	  		  snprintf(buffer, sizeof(buffer), "uui: %02X \r\n", balance);  // or %02X for hex
+	  		  //Transmit data thru UART serial monitor
+	  		  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 
-	  //If no faults and no discharging(6th bit VGOOD is don't care)
-	  if((batt_info.fault_info == 0b10000000) ||
-		  (batt_info.fault_info == 0b10100000) ||
-		  (batt_info.fault_info == 0b00000000) ||
-		  (batt_info.fault_info == 0b00100000)){
-		  if(batt_info.cell_volt_diff > 20){
-			  bms_ic_balance_cells(&batt_info);
-		  }
+	  case batt_state_balancing:
+	  	  bms_ic_balance_cells(&batt_info);
+	  	  if(finite_state_machine != batt_state_balancing){
+	  		  break;
+	  	  }
+	  case batt_state_fault:
+		  snprintf(buffer, sizeof(buffer), "\r\n", finite_state_machine);  // or %02X for hex
+		  //Transmit data thru UART serial monitor
+		  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 	  }
-	  can_send(&batt_info, &can_id_lookup, &can_message);
-	  tick = HAL_GetTick();
-	  HAL_Delay(1000);
+
 
   }
 
@@ -262,7 +307,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -345,6 +390,134 @@ static void MX_I2C1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 499;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 7199;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 999;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 7199;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
+  * @brief TIM6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM6_Init(void)
+{
+
+  /* USER CODE BEGIN TIM6_Init 0 */
+
+  /* USER CODE END TIM6_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM6_Init 1 */
+
+  /* USER CODE END TIM6_Init 1 */
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 9999;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 7199;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM6_Init 2 */
+
+  /* USER CODE END TIM6_Init 2 */
+
+}
+
+/**
   * @brief USART1 Initialization Function
   * @param None
   * @retval None
@@ -414,11 +587,17 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(Batt_EEPROM_Pin_GPIO_Port, Batt_EEPROM_Pin_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : CHG_XRST_Pin CHG_XALERT_Pin */
-  GPIO_InitStruct.Pin = CHG_XRST_Pin|CHG_XALERT_Pin;
+  /*Configure GPIO pin : Batt_XRST_Pin */
+  GPIO_InitStruct.Pin = Batt_XRST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(Batt_XRST_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Batt_XALERT_Pin */
+  GPIO_InitStruct.Pin = Batt_XALERT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Batt_XALERT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : Batt_EEPROM_Pin_Pin */
   GPIO_InitStruct.Pin = Batt_EEPROM_Pin_Pin;
@@ -427,11 +606,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(Batt_EEPROM_Pin_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : CGH_INT_Pin CHG_STAT1_Pin CHG_STAT2_Pin */
-  GPIO_InitStruct.Pin = CGH_INT_Pin|CHG_STAT1_Pin|CHG_STAT2_Pin;
+  /*Configure GPIO pins : CHG_INT_Pin CHG_STAT1_Pin CHG_STAT2_Pin */
+  GPIO_InitStruct.Pin = CHG_INT_Pin|CHG_STAT1_Pin|CHG_STAT2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI2_IRQn, 12, 0);
+  HAL_NVIC_EnableIRQ(EXTI2_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

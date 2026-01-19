@@ -52,7 +52,7 @@ void can_send(batt_info_t *b, can_id_lookup_t *id, can_message_t *m){
 	m->can_data[0] = (uint8_t) (b->temp_buffer);
 	m->can_data[1] = (uint8_t) (b->fault_info);
 	m->can_data[2] = (uint8_t) (HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, cell_balance_reg, I2C_MEMADD_SIZE_8BIT, &balance, sizeof(uint8_t), 100));
-	m->can_data[3] = 0;
+	m->can_data[3] = (uint8_t) (finite_state_machine);
 	m->can_data[4] = 0;
 	m->can_data[5] = 0;
 	m->can_data[6] = 0;

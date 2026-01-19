@@ -39,7 +39,7 @@ void bms_ic_read_voltage(batt_info_t *b){
 	ADC_ChannelConfTypeDef sConfig = {0};
 	sConfig.Channel = ADC_CHANNEL_0;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
-	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	sConfig.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
 	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
 	for(int i=0; i<6; i++){
@@ -89,7 +89,7 @@ void bms_ic_read_current(batt_info_t *b){
 	ADC_ChannelConfTypeDef sConfig = {0};
 	sConfig.Channel = ADC_CHANNEL_1;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
-	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	sConfig.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
 	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
 	HAL_ADC_Start(&hadc1);
@@ -106,7 +106,7 @@ void bms_ic_read_temp(batt_info_t *b){
 	ADC_ChannelConfTypeDef sConfig = {0};
 	sConfig.Channel = ADC_CHANNEL_6;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
-	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	sConfig.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
 	HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
 	HAL_ADC_Start(&hadc1);

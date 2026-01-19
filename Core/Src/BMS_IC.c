@@ -81,7 +81,6 @@ void bms_ic_read_voltage(batt_info_t *b){
 	b->cell_volt_lowest = lowest;
 	b->cell_volt_diff = highest - lowest;
 	b->cell_volt_avg = sum/NUM_CELLS;
-
 }
 
 //This function reads current represents in mA
@@ -192,4 +191,38 @@ void bms_ic_top3_sort(batt_info_t *b, float *top3, uint8_t *indexes){
 	top3[0] = h1; indexes[0] = i1;
 	top3[1] = h2; indexes[1] = i2;
 	top3[2] = h3; indexes[2] = i3;
+}
+
+//Implement any additional software protections here
+void bms_software_protection(batt_info_t *b){
+	//BMS IC already has OV and UV detection, but just in case
+	if(b->cell_volt_highest > 4200){ //If highest cell reading is over 4.2V, set OV in fault register
+		b->fault_info |= 0x03;
+	}
+	else{
+		b->fault_info &= ~0x03;
+	}
+	if(b->cell_volt_lowest < 2800){ //If lowest cell reading is under 2.8V, set UV in fault register
+		b->fault_info |= 0x08;
+	}
+	else{
+		b->fault_info &= ~0x08;
+	}
+
+	//BMS IC already has OT detection, but just in case
+	if(b->current > 10000){ //If current reading is over 10A, set OVTP in fault register
+		b->fault_info |= 0x02;
+	}
+	else{
+		b->fault_info &= ~0x02;
+	}
+
+	//BMS IC already has OT detection, but just in case
+	if(b->temp_buffer > 45000){ //If temp reading is over 45C, set OVTP in fault register
+		b->fault_info |= 0x10;
+	}
+	else{
+		b->fault_info &= ~0x10;
+	}
+
 }

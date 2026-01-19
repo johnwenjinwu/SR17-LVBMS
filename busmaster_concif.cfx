@@ -7,8 +7,8 @@
     <IsReplayFilterEnabled>FALSE</IsReplayFilterEnabled>
     <IsLogFilterEnabled>FALSE</IsLogFilterEnabled>
     <IsLogFilterLINEnabled>FALSE</IsLogFilterLINEnabled>
-    <IsLoggingEnabled>FALSE</IsLoggingEnabled>
-    <IsMsgIntepretationEnabled>FALSE</IsMsgIntepretationEnabled>
+    <IsLoggingEnabled>TRUE</IsLoggingEnabled>
+    <IsMsgIntepretationEnabled>TRUE</IsMsgIntepretationEnabled>
     <IsOverWriteEnabled>TRUE</IsOverWriteEnabled>
     <DisplayTimeMode>SYSTEM</DisplayTimeMode>
     <DisplayNumericMode>FALSE</DisplayNumericMode>
@@ -25,11 +25,37 @@
     </Window_Position>
   </Global_Configuration>
   <Module_Configuration>
-    <CAN_Database_Files/>
+    <CAN_Database_Files>
+      <FilePath>SR17_LVBMS.dbf</FilePath>
+    </CAN_Database_Files>
+    <Bus_Statistics>
+      <CAN_Statistics>
+        <COLUMN>
+          <ID>Parameter</ID>
+          <Order>1</Order>
+          <Width>200</Width>
+          <IsVisible>1</IsVisible>
+        </COLUMN>
+        <COLUMN>
+          <ID>Channel 1</ID>
+          <Order>2</Order>
+          <Width>90</Width>
+          <IsVisible>1</IsVisible>
+        </COLUMN>
+      </CAN_Statistics>
+      <Window_Position>
+        <Visibility>SHOWNORMAL</Visibility>
+        <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
+        <Top>149</Top>
+        <Left>305</Left>
+        <Bottom>813</Bottom>
+        <Right>727</Right>
+      </Window_Position>
+    </Bus_Statistics>
     <J1939_Database_Files/>
     <CAN_DIL_Section>
       <DriverName>PEAK USB</DriverName>
-      <ControllerMode>Bus Off</ControllerMode>
+      <ControllerMode>Unknown</ControllerMode>
       <ControllerSettings>
         <Channel>
           <BaudRate>500</BaudRate>
@@ -84,19 +110,57 @@
       </ControllerSettings>
     </CAN_DIL_Section>
     <CAN_Signal_Watch>
+      <Message>
+        <Id>666</Id>
+        <Signal>LVBMS_Cell_3</Signal>
+        <Signal>LVBMS_Cell_0</Signal>
+        <Signal>LVBMS_Cell_2</Signal>
+        <Signal>LVBMS_Cell_1</Signal>
+      </Message>
+      <Message>
+        <Id>667</Id>
+        <Signal>LVBMS_Cell_lowest</Signal>
+        <Signal>LVBMS_Cell_5</Signal>
+        <Signal>LVBMS_Cell_4</Signal>
+        <Signal>LVBMS_Cell_highest</Signal>
+      </Message>
+      <Message>
+        <Id>668</Id>
+        <Signal>LVBMS_Cell_avg</Signal>
+        <Signal>LVBMS_batt_volt</Signal>
+        <Signal>LVBMS_current</Signal>
+        <Signal>LVBMS_Cell_diff</Signal>
+      </Message>
+      <Message>
+        <Id>669</Id>
+        <Signal>LVBMS_Balancing_Cell_4</Signal>
+        <Signal>LVBMS_Over_Load</Signal>
+        <Signal>LVBMS_Balancing_Cell_1</Signal>
+        <Signal>LVBMS_Balancing_Cell_5</Signal>
+        <Signal>LVBMS_Balancing_Cell_0</Signal>
+        <Signal>LVBMS_Power_Good</Signal>
+        <Signal>LVBMS_Over_Voltage</Signal>
+        <Signal>LVBMS_Discharging</Signal>
+        <Signal>LVBMS_Under_Voltage</Signal>
+        <Signal>LVBMS_Over_Temp</Signal>
+        <Signal>LVBMS_Balancing_Cell_3</Signal>
+        <Signal>LVBMS_Charging</Signal>
+        <Signal>LVBMS_Thermistor</Signal>
+        <Signal>LVBMS_Short_Circuit</Signal>
+      </Message>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
-        <Top>37</Top>
-        <Left>618</Left>
-        <Right>1108</Right>
-        <Bottom>267</Bottom>
+        <Top>110</Top>
+        <Left>409</Left>
+        <Right>1372</Right>
+        <Bottom>733</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
-        <MESSAGE_COLUMN>94</MESSAGE_COLUMN>
-        <Raw_Val_Column>94</Raw_Val_Column>
-        <Physical_Val_Column>189</Physical_Val_Column>
-        <Signal_Column>94</Signal_Column>
+        <MESSAGE_COLUMN>189</MESSAGE_COLUMN>
+        <Raw_Val_Column>189</Raw_Val_Column>
+        <Physical_Val_Column>378</Physical_Val_Column>
+        <Signal_Column>189</Signal_Column>
       </COLUMN_WIDTH>
     </CAN_Signal_Watch>
     <J1939_Signal_Watch>
@@ -109,10 +173,10 @@
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
-        <MESSAGE_COLUMN>87</MESSAGE_COLUMN>
-        <Raw_Val_Column>87</Raw_Val_Column>
-        <Physical_Val_Column>174</Physical_Val_Column>
-        <Signal_Column>87</Signal_Column>
+        <MESSAGE_COLUMN>94</MESSAGE_COLUMN>
+        <Raw_Val_Column>94</Raw_Val_Column>
+        <Physical_Val_Column>189</Physical_Val_Column>
+        <Signal_Column>94</Signal_Column>
       </COLUMN_WIDTH>
     </J1939_Signal_Watch>
     <LIN_Signal_Watch>
@@ -125,10 +189,10 @@
         <Bottom>300</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
-        <MESSAGE_COLUMN>87</MESSAGE_COLUMN>
-        <Raw_Val_Column>87</Raw_Val_Column>
-        <Physical_Val_Column>174</Physical_Val_Column>
-        <Signal_Column>87</Signal_Column>
+        <MESSAGE_COLUMN>94</MESSAGE_COLUMN>
+        <Raw_Val_Column>94</Raw_Val_Column>
+        <Physical_Val_Column>189</Physical_Val_Column>
+        <Signal_Column>94</Signal_Column>
       </COLUMN_WIDTH>
     </LIN_Signal_Watch>
     <CAN_Signal_Graph>
@@ -148,32 +212,50 @@
         <Display_Type>NORMAL</Display_Type>
       </GRAPH_PARAMETERS>
       <Window_Position>
-        <Visibility>HIDE</Visibility>
+        <Visibility>SHOWNORMAL</Visibility>
         <Window_Position>HIDE</Window_Position>
-        <Top>-1</Top>
+        <Top>0</Top>
         <Left>0</Left>
-        <Bottom>0</Bottom>
-        <Right>0</Right>
+        <Bottom>624</Bottom>
+        <Right>1534</Right>
       </Window_Position>
       <Splitter_Window_Col_0>
-        <CxIdeal>-1</CxIdeal>
+        <CxIdeal>383</CxIdeal>
         <CxMin>0</CxMin>
       </Splitter_Window_Col_0>
       <Splitter_Window_Col_1>
-        <CxIdeal>0</CxIdeal>
+        <CxIdeal>1124</CxIdeal>
         <CxMin>0</CxMin>
       </Splitter_Window_Col_1>
       <Splitter_Window_Row_0>
-        <CxIdeal>0</CxIdeal>
+        <CxIdeal>416</CxIdeal>
         <CxMin>0</CxMin>
       </Splitter_Window_Row_0>
       <Splitter_Window_Row_1>
-        <CxIdeal>0</CxIdeal>
+        <CxIdeal>158</CxIdeal>
         <CxMin>0</CxMin>
       </Splitter_Window_Row_1>
     </CAN_Signal_Graph>
     <CAN_Log>
       <LogOnConnect>0</LogOnConnect>
+      <Log_Block>
+        <IsEnabled>TRUE</IsEnabled>
+        <Time_Mode>SYSTEM</Time_Mode>
+        <Numeric_Mode>HEX</Numeric_Mode>
+        <IsAppendLog_Enabled>TRUE</IsAppendLog_Enabled>
+        <Reset_Absolute_Time>FALSE</Reset_Absolute_Time>
+        <Channel>0</Channel>
+        <File_Path>..\..\..\..\Users\wenji\OneDrive\Documents\BUSMASTER\3.2.2\BUSMASTERLogFile_0.log</File_Path>
+        <Trigger_Start_ID>-1</Trigger_Start_ID>
+        <Trigger_Stop_ID>-1</Trigger_Stop_ID>
+        <IsLogOnTransmission>FALSE</IsLogOnTransmission>
+        <IsLogOnSize>FALSE</IsLogOnSize>
+        <LogOnSize>50</LogOnSize>
+        <IsLogOnTime>FALSE</IsLogOnTime>
+        <LogOnTime>0.30</LogOnTime>
+        <FilesAllowed>10</FilesAllowed>
+        <Comments/>
+      </Log_Block>
     </CAN_Log>
     <J1939_Log>
       <LogOnConnect>0</LogOnConnect>
@@ -209,8 +291,8 @@
       <COLUMN>
         <ID/>
         <Order>1</Order>
-        <IsVisible>0</IsVisible>
-        <Width>0</Width>
+        <IsVisible>1</IsVisible>
+        <Width>19</Width>
       </COLUMN>
       <COLUMN>
         <ID>Time</ID>
@@ -258,19 +340,19 @@
         <ID>Data Byte(s)</ID>
         <Order>9</Order>
         <IsVisible>1</IsVisible>
-        <Width>719</Width>
+        <Width>944</Width>
       </COLUMN>
       <IsHex>1</IsHex>
       <IsAppend>0</IsAppend>
-      <IsInterpret>0</IsInterpret>
+      <IsInterpret>1</IsInterpret>
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
-        <Visibility>SHOWNORMAL</Visibility>
+        <Visibility>MAXIMIZE</Visibility>
         <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Bottom>411</Bottom>
-        <Right>1308</Right>
+        <Top>1</Top>
+        <Left>4</Left>
+        <Bottom>412</Bottom>
+        <Right>1311</Right>
       </Window_Position>
       <Interpretation_Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
@@ -285,8 +367,8 @@
       <COLUMN>
         <ID/>
         <Order>1</Order>
-        <IsVisible>0</IsVisible>
-        <Width>0</Width>
+        <IsVisible>1</IsVisible>
+        <Width>19</Width>
       </COLUMN>
       <COLUMN>
         <ID>Time</ID>
@@ -358,15 +440,15 @@
         <ID>Data Byte(s)</ID>
         <Order>13</Order>
         <IsVisible>1</IsVisible>
-        <Width>414</Width>
+        <Width>395</Width>
       </COLUMN>
       <IsHex>1</IsHex>
       <IsAppend>0</IsAppend>
-      <IsInterpret>0</IsInterpret>
+      <IsInterpret>1</IsInterpret>
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
-        <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
+        <WindowPlacement>SETMINPOSITION</WindowPlacement>
         <Top>0</Top>
         <Left>0</Left>
         <Bottom>411</Bottom>
@@ -388,8 +470,8 @@
       <COLUMN>
         <ID/>
         <Order>1</Order>
-        <IsVisible>0</IsVisible>
-        <Width>0</Width>
+        <IsVisible>1</IsVisible>
+        <Width>19</Width>
       </COLUMN>
       <COLUMN>
         <ID>Time</ID>
@@ -443,15 +525,15 @@
         <ID>Checksum</ID>
         <Order>10</Order>
         <IsVisible>1</IsVisible>
-        <Width>428</Width>
+        <Width>409</Width>
       </COLUMN>
       <IsHex>1</IsHex>
       <IsAppend>0</IsAppend>
-      <IsInterpret>0</IsInterpret>
+      <IsInterpret>1</IsInterpret>
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
-        <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
+        <WindowPlacement>SETMINPOSITION</WindowPlacement>
         <Top>0</Top>
         <Left>0</Left>
         <Bottom>411</Bottom>
@@ -470,12 +552,61 @@
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>SETMINPOSITION</WindowPlacement>
-        <Top>1</Top>
-        <Left>4</Left>
-        <Bottom>661</Bottom>
-        <Right>864</Right>
+        <Top>-15</Top>
+        <Left>314</Left>
+        <Bottom>640</Bottom>
+        <Right>1174</Right>
       </Window_Position>
-      <Message_List/>
+      <Message_List>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>666</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>TRUE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>0,0,0,0,0,0,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>FALSE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>667</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>TRUE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>0,0,0,0,0,0,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>FALSE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>668</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>0,0,0,0,0,0,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>FALSE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>669</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>0,0,0,0,0,0,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>FALSE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>FALSE</Key_Enabled>
+        </Message>
+      </Message_List>
     </CAN_Tx_Window>
     <CAN_Wave_Form_Genarator>
       <Default_Sampling_Period>125</Default_Sampling_Period>

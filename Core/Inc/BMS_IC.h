@@ -32,6 +32,6 @@ void bms_ic_read_temp(batt_info_t *b);
 void bms_ic_read_faults(batt_info_t *b);
 void bms_ic_balance_cells(batt_info_t *b);
 void bms_ic_top3_sort(batt_info_t *b, float *top3, uint8_t *indexes);
-
+void bms_software_protection(batt_info_t *b);
 
 #endif /* __BMS_IC_H */

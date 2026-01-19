@@ -132,8 +132,10 @@ int main(void)
 		  .fault_info = 0,
   };
   char buffer[32];
-	HAL_StatusTypeDef status = HAL_OK;
-	bms_ic_host_control_EN();
+  uint32_t tick = 0;
+
+  HAL_StatusTypeDef status = HAL_OK;
+  bms_ic_host_control_EN();
 
   /* USER CODE END 2 */
 
@@ -144,34 +146,25 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  tick = HAL_GetTick();
 	  bms_ic_eeprom_check();
 	  bms_ic_read_faults(&batt_info);
 	  bms_ic_read_voltage(&batt_info);
 	  bms_ic_read_current(&batt_info);
 	  bms_ic_read_temp(&batt_info);
 	  bms_software_protection(&batt_info);
-	  if(batt_info.fault_info == 0b10000000){ //If no faults and charging
+
+	  //If no faults and no discharging(6th bit VGOOD is don't care)
+	  if((batt_info.fault_info == 0b10000000) ||
+		  (batt_info.fault_info == 0b10100000) ||
+		  (batt_info.fault_info == 0b00000000) ||
+		  (batt_info.fault_info == 0b00100000)){
 		  if(batt_info.cell_volt_diff > 20){
 			  bms_ic_balance_cells(&batt_info);
 		  }
 	  }
 	  can_send(&batt_info, &can_id_lookup, &can_message);
-	  // snprintf(buffer, sizeof(buffer), "Cell 0: %d mV\r\n", batt_info.voltage_buffer[4]);
-	  // HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  // snprintf(buffer, sizeof(buffer), "Cell 1: %d mV\r\n", batt_info.voltage_buffer[5]);
-	  // HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  // snprintf(buffer, sizeof(buffer), "Pack: %d mV\r\n", batt_info.cell_volt_sum);
-	  // HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  // bms_ic_read_faults(&batt_info);
-	  // snprintf(buffer, sizeof(buffer), "Fault Reg: %d \r\n", batt_info.fault_info);
-	  // HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  // bms_ic_read_current(&batt_info);
-	  // bms_ic_read_temp(&batt_info);
-	  // snprintf(buffer, sizeof(buffer), "Current: %d mA\r\n", batt_info.current);
-	  // HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-	  // snprintf(buffer, sizeof(buffer), "Temp: %d mC\r\n\n", batt_info.temp_buffer);
-	  // HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-
+	  tick = HAL_GetTick();
 	  HAL_Delay(1000);
 
   }

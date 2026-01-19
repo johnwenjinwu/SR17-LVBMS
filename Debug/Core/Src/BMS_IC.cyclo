@@ -2,7 +2,7 @@
 ../Core/Src/BMS_IC.c:36:6:bms_ic_read_voltage	5
 ../Core/Src/BMS_IC.c:87:6:bms_ic_read_current	1
 ../Core/Src/BMS_IC.c:104:6:bms_ic_read_temp	1
-../Core/Src/BMS_IC.c:121:6:bms_ic_read_faults	1
-../Core/Src/BMS_IC.c:138:6:bms_ic_balance_cells	5
-../Core/Src/BMS_IC.c:172:6:bms_ic_top3_sort	5
-../Core/Src/BMS_IC.c:197:6:bms_software_protection	5
+../Core/Src/BMS_IC.c:124:6:bms_ic_read_faults	1
+../Core/Src/BMS_IC.c:141:6:bms_ic_balance_cells	5
+../Core/Src/BMS_IC.c:175:6:bms_ic_top3_sort	5
+../Core/Src/BMS_IC.c:200:6:bms_software_protection	5

@@ -113,8 +113,11 @@ void bms_ic_read_temp(batt_info_t *b){
 	HAL_ADC_PollForConversion(&hadc1, 100);
 	adc_val = HAL_ADC_GetValue(&hadc1);
 	vadc = (adc_val * 3.3) / 4095.0;
-	uint8_t kelvin = 298.15, beta = 4275, Rt = 10000, R1 = 47000;
-	b->temp_buffer = 1000*(1/((1/kelvin)+(1/beta)*log(vadc*R1/(Rt*(3.3-vadc)))));
+	float kelvin = 298.15, beta = 4275, Rt, Rt0 = 10000, R1 = 47000, inv_temp, temp_K;
+	Rt = R1 * (vadc / (3.3f - vadc));
+	inv_temp = (1 / kelvin) + (1 / beta) * log(Rt / Rt0);
+	temp_K = 1 / inv_temp;
+	b->temp_buffer = 1000 * (temp_K - 273.15);
 	HAL_ADC_Stop(&hadc1);
 }
 

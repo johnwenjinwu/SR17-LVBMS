@@ -28,29 +28,30 @@
 [START_SIGNALS] LVBMS_current,16,7,0,U,8000,0,1,0,0.001,A,,LVBMS
 [END_MSG]
 
-[START_MSG] bms_message_4,669,8,22,1,S,LVBMS
+[START_MSG] bms_message_4,669,8,23,1,S,LVBMS
 [START_SIGNALS] LVBMS_Thermistor,16,1,0,U,6553,0,1,0,0.001,C,,LVBMS
-[START_SIGNALS] LVBMS_Short_Circuit,1,2,0,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Over_Load,1,2,1,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Over_Voltage,1,2,2,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Under_Voltage,1,2,3,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Over_Temp,1,3,0,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Power_Good,1,3,1,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Discharging,1,3,2,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Charging,1,3,3,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Balancing_Cell_0,1,3,4,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Balancing_Cell_1,1,3,5,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Balancing_Cell_3,1,3,6,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Balancing_Cell_4,1,3,7,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_Balancing_Cell_5,1,4,0,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_batt_state_standby,1,4,1,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_batt_state_charing,1,4,2,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_batt_state_discharging,1,4,3,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_batt_state_fault,1,4,4,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_batt_state_charging_and_balancing,1,4,5,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_batt_state_balancing,1,4,6,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_xx,1,4,7,B,1,0,1,0,1, ,,LVBMS
-[START_SIGNALS] LVBMS_xxx,1,5,0,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Short_Circuit,1,2,0,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Over_Load,1,2,1,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Over_Voltage,1,2,2,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Under_Voltage,1,2,3,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Over_Temp,1,2,4,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Power_Good,1,2,5,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Discharging,1,2,6,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Status_Charging,1,2,7,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_state_standby,1,3,0,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_state_charing,1,3,1,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_state_discharging,1,3,2,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_state_fault,1,3,3,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_state_charging_and_balancing,1,3,4,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_state_balancing,1,3,5,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_xx,1,3,6,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_batt_xxx,1,3,7,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Balancing_Cell_0,1,4,0,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Balancing_Cell_1,1,4,1,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Balancing_Cell_2,1,4,2,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Balancing_Cell_3,1,4,3,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Balancing_Cell_4,1,4,4,B,1,0,1,0,1, ,,LVBMS
+[START_SIGNALS] LVBMS_Balancing_Cell_5,1,4,5,B,1,0,1,0,1, ,,LVBMS
 [END_MSG]
 
 [START_VALUE_TABLE]

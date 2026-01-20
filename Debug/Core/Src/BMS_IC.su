@@ -1,8 +1,8 @@
-../Core/Src/BMS_IC.c:30:6:bms_ic_host_control_EN	24	static
-../Core/Src/BMS_IC.c:36:6:bms_ic_read_voltage	64	static
-../Core/Src/BMS_IC.c:87:6:bms_ic_read_current	32	static
-../Core/Src/BMS_IC.c:104:6:bms_ic_read_temp	72	static
-../Core/Src/BMS_IC.c:124:6:bms_ic_read_faults	40	static
-../Core/Src/BMS_IC.c:141:6:bms_ic_balance_cells	56	static
-../Core/Src/BMS_IC.c:175:6:bms_ic_top3_sort	48	static
-../Core/Src/BMS_IC.c:200:6:bms_software_protection	16	static
+../Core/Src/BMS_IC.c:31:6:bms_ic_host_control_EN	24	static
+../Core/Src/BMS_IC.c:37:6:bms_ic_read_voltage	64	static
+../Core/Src/BMS_IC.c:88:6:bms_ic_read_current	32	static
+../Core/Src/BMS_IC.c:105:6:bms_ic_read_temp	72	static
+../Core/Src/BMS_IC.c:125:6:bms_ic_read_faults	40	static
+../Core/Src/BMS_IC.c:142:6:bms_ic_balance_cells	56	static
+../Core/Src/BMS_IC.c:176:6:bms_ic_top3_sort	48	static
+../Core/Src/BMS_IC.c:201:6:bms_software_protection	16	static

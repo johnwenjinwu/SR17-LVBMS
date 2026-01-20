@@ -12,6 +12,7 @@ Read current
 #include "main.h"
 #include "BMS_IC.h"
 #include <math.h>
+#include <stdlib.h>
 
 const uint8_t status_reg = 0x00;
 const uint8_t output_control_reg = 0x01;
@@ -34,7 +35,7 @@ void bms_ic_host_control_EN(){
 
 //This function reads cell voltages and pack voltage and represents in mV
 void bms_ic_read_voltage(batt_info_t *b){
-	uint16_t highest = 0, lowest = 5000, diff = 0, avg = 0, sum = 0;
+	uint16_t highest = 0, lowest = 5000, sum = 0;
 
 	ADC_ChannelConfTypeDef sConfig = {0};
 	sConfig.Channel = ADC_CHANNEL_0;

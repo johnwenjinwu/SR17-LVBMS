@@ -21,6 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "string.h"
+#include "stdio.h"
 #include "BMS_IC.h"
 #include "CAN.h"
 /* USER CODE END Includes */
@@ -56,6 +58,9 @@
 		  .fault_info = 0,
   };
   finite_state_machine_t finite_state_machine;
+  char buffer[32];
+  uint8_t balance;
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -98,6 +103,12 @@ static void MX_TIM6_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+/*The 3 timer interrupts has different responsibilities
+ *HAL_TIM_Base_Start_IT(&htim2);	//100ms for batt_info reading
+  HAL_TIM_Base_Start_IT(&htim3);	//500ms for CAN transmission
+  HAL_TIM_Base_Start_IT(&htim6);	//1s for balancing check
+ */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim == &htim2){
 		bms_ic_read_faults(&batt_info);
@@ -168,16 +179,14 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Base_Start_IT(&htim2);	//50ms for batt_info reading
-  HAL_TIM_Base_Start_IT(&htim3);	//100ms for CAN transmission
+  HAL_TIM_Base_Start_IT(&htim2);	//100ms for batt_info reading
+  HAL_TIM_Base_Start_IT(&htim3);	//500ms for CAN transmission
   HAL_TIM_Base_Start_IT(&htim6);	//1s for balancing check
 
   HAL_ADCEx_Calibration_Start(&hadc1);
   HAL_CAN_Start(&hcan1);
 
-  char buffer[32];
-  uint8_t balance;
-  HAL_StatusTypeDef status = HAL_OK;
+//  HAL_StatusTypeDef status = HAL_OK;
   bms_ic_host_control_EN();
 
   /* USER CODE END 2 */
@@ -189,26 +198,21 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, cell_balance_reg, I2C_MEMADD_SIZE_8BIT, &balance, sizeof(uint8_t), 100);
-	  	  		  snprintf(buffer, sizeof(buffer), "uui: %02X \r\n", finite_state_machine);  // or %02X for hex
-	  	  		  //Transmit data thru UART serial monitor
-	  	  		  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+
 	  switch(finite_state_machine){
 	  case batt_state_standby:
-		  HAL_I2C_Mem_Read(&hi2c1, BMS_ADDR, cell_balance_reg, I2C_MEMADD_SIZE_8BIT, &balance, sizeof(uint8_t), 100);
-	  		  snprintf(buffer, sizeof(buffer), "uui: %02X \r\n", balance);  // or %02X for hex
-	  		  //Transmit data thru UART serial monitor
-	  		  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-
+		  //add
+		  break;
 	  case batt_state_balancing:
 	  	  bms_ic_balance_cells(&batt_info);
 	  	  if(finite_state_machine != batt_state_balancing){
-	  		  break;
+
 	  	  }
+	  	  break;
 	  case batt_state_fault:
-		  snprintf(buffer, sizeof(buffer), "\r\n", finite_state_machine);  // or %02X for hex
-		  //Transmit data thru UART serial monitor
-		  HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
+		  //add
+		  break;
+
 	  }
 
 
@@ -408,7 +412,7 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 499;
+  htim2.Init.Prescaler = 999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 7199;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -453,7 +457,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 999;
+  htim3.Init.Prescaler = 4999;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 7199;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -497,7 +501,7 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 9999;
+  htim6.Init.Prescaler = 19999;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 7199;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

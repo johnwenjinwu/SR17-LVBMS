@@ -24,16 +24,16 @@ typedef struct batt_info_t{
 	uint8_t fault_info;
 }batt_info_t;
 
-typedef enum finite_state_machine_t{
+typedef enum batt_status_t{
 	batt_state_standby = 1,
-	batt_state_charing = 2,
-	batt_state_discharging = 4,
-	batt_state_fault = 8,
-	batt_state_charging_and_balancing = 16,
+	batt_state_fault = 2,
+	batt_state_charging_and_balancing = 4,
+	batt_state_charging = 8,
+	batt_state_discharging = 16,
 	batt_state_balancing = 32,
 	batt_state_xx = 64,
-	batt_state_xxx = 128
-}finite_state_machine_t;
+	batt_state_xxx = 128,
+}batt_status_t;
 
 void bms_ic_host_control_EN();
 void bms_ic_read_voltage(batt_info_t *b);

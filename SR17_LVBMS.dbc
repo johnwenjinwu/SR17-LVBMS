@@ -23,7 +23,7 @@ SG_ LVBMS_batt_volt : 32|16@1+ (0.001,0) [0|25] "V" LVBMS
 SG_ LVBMS_current : 48|16@1+ (0.001,0) [0|8] "A" LVBMS
 
 BO_ 669 bms_message_4: 8 LVBMS
-SG_ LVBMS_Thermistor : 0|16@1+ (0.001,0) [0|6.5535] "C" LVBMS
+SG_ LVBMS_Thermistor : 0|8@1+ (0.001,0) [0|6.5535] "C" LVBMS
 SG_ LVBMS_Status_Short_Circuit : 8|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_Status_Over_Load : 9|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_Status_Over_Voltage : 10|1@1- (1,0) [0|1] " " LVBMS
@@ -33,10 +33,10 @@ SG_ LVBMS_Status_Power_Good : 13|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_Status_Discharging : 14|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_Status_Charging : 15|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_batt_state_standby : 16|1@1- (1,0) [0|1] " " LVBMS
-SG_ LVBMS_batt_state_charing : 17|1@1- (1,0) [0|1] " " LVBMS
-SG_ LVBMS_batt_state_discharging : 18|1@1- (1,0) [0|1] " " LVBMS
-SG_ LVBMS_batt_state_fault : 19|1@1- (1,0) [0|1] " " LVBMS
-SG_ LVBMS_batt_state_charging_and_balancing : 20|1@1- (1,0) [0|1] " " LVBMS
+SG_ LVBMS_batt_state_fault : 17|1@1- (1,0) [0|1] " " LVBMS
+SG_ LVBMS_batt_state_charging_and_balancing : 18|1@1- (1,0) [0|1] " " LVBMS
+SG_ LVBMS_batt_state_charging : 19|1@1- (1,0) [0|1] " " LVBMS
+SG_ LVBMS_batt_state_discharging : 20|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_batt_state_balancing : 21|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_batt_xx : 22|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_batt_xxx : 23|1@1- (1,0) [0|1] " " LVBMS
@@ -46,4 +46,6 @@ SG_ LVBMS_Balancing_Cell_2 : 26|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_Balancing_Cell_3 : 27|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_Balancing_Cell_4 : 28|1@1- (1,0) [0|1] " " LVBMS
 SG_ LVBMS_Balancing_Cell_5 : 29|1@1- (1,0) [0|1] " " LVBMS
-
+SG_ LVBMS_time_since_fault : 32|8@1+ (1,0) [0|60] "minute" LVBMS
+SG_ LVBMS_time_since_balancing : 40|8@1+ (1,0) [0|255] "minute" LVBMS
+SG_ LVBMS_time_since_fault_sec : 48|8@1+ (1,0) [0|255] "sec" LVBMS

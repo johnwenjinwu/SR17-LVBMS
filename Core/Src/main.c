@@ -57,9 +57,16 @@
 		  .cell_volt_sum = 0,
 		  .fault_info = 0,
   };
-  finite_state_machine_t finite_state_machine;
+  batt_status_t batt_status;
   char buffer[32];
   uint8_t balance;
+
+  uint8_t mask_balance = 0b10100000;
+  uint8_t mask_fault = 0b00011111;
+  uint8_t time_since_balancing = 0, time_since_balancing_sec = 0,
+		  time_since_fault = 0, time_since_fault_sec = 0,
+		  time_since_no_fault = 0, time_since_no_fault_sec = 0,
+		  time_since_charing = 0, time_since_charing_sec = 0;
 
 /* USER CODE END PD */
 
@@ -105,9 +112,9 @@ static void MX_TIM6_Init(void);
 /* USER CODE BEGIN 0 */
 
 /*The 3 timer interrupts has different responsibilities
- *HAL_TIM_Base_Start_IT(&htim2);	//100ms for batt_info reading
-  HAL_TIM_Base_Start_IT(&htim3);	//500ms for CAN transmission
-  HAL_TIM_Base_Start_IT(&htim6);	//1s for balancing check
+ *(&htim2)100ms for batt_info reading
+  (&htim3)500ms for CAN transmission
+  (&htim6)1s for balancing check
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim == &htim2){
@@ -121,20 +128,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	}
 	else if(htim == &htim6){
 		  //If no faults and no discharging(6th bit VGOOD is don't care)
-		  if((batt_info.fault_info == 0b10000000) ||
-			  (batt_info.fault_info == 0b10100000) ||
-			  (batt_info.fault_info == 0b00000000) ||
-			  (batt_info.fault_info == 0b00100000)){
+		  if((batt_info.fault_info & ~mask_balance) == 0){
 			  if(batt_info.cell_volt_diff > 20){
-				  finite_state_machine = batt_state_balancing;
+				  batt_status = batt_state_balancing;
+				  time_since_balancing_sec ++;
 			  }
 			  else if(batt_info.cell_volt_diff < 10){
-				  finite_state_machine = batt_state_charing;
+				  batt_status = batt_state_standby;
 			  }
 		  }
-		  if(((batt_info.fault_info == 0b00001000)) ||
-			  (batt_info.fault_info == 0b00101000)){
-			  finite_state_machine = batt_state_fault;
+		  //If any fault bit is set (0 to bit 4)
+		  else if((batt_info.fault_info & mask_fault) != 0){
+			  batt_status = batt_state_fault;
+			  time_since_fault_sec++;
+				snprintf(buffer, sizeof(buffer), "%d\r\n", time_since_fault);  // or %02X for hex
+						//Transmit data thru UART serial monitor
+						HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
 		  }
 	}
 }
@@ -195,30 +204,45 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  time_since_balancing = 0, time_since_balancing_sec = 0;
+	  time_since_fault = 0, time_since_fault_sec = 0;
+	  time_since_no_fault = 0, time_since_no_fault_sec = 0;
+	  time_since_charing = 0, time_since_charing_sec = 0;
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 
-	  switch(finite_state_machine){
-	  case batt_state_standby:
-		  //add
-		  break;
-	  case batt_state_balancing:
-	  	  bms_ic_balance_cells(&batt_info);
-	  	  if(finite_state_machine != batt_state_balancing){
+	  while(batt_status == batt_state_standby){
+		  //nihao fine shyt
+	  }
+	  while(batt_status == batt_state_charging){
 
-	  	  }
-	  	  break;
-	  case batt_state_fault:
-		  //add
-		  break;
+	  }
+	  while(batt_status == batt_state_discharging){
 
+	  }
+	  while(batt_status == batt_state_fault){
+		  if(time_since_fault_sec == 59){
+			  time_since_fault_sec = 0;
+			  time_since_fault ++;
+		  }
+	  }
+	  while(batt_status == batt_state_charging_and_balancing){
+		  bms_ic_balance_cells(&batt_info);
+		  if(time_since_balancing_sec == 59){
+			  time_since_balancing_sec = 0;
+			  time_since_balancing ++;
+			  time_since_charing ++;
+		  }
+	  }
+	  while(batt_status == batt_state_balancing){
+		  bms_ic_balance_cells(&batt_info);
 	  }
 
 
-  }
-
   /* USER CODE END 3 */
+  }
 }
 
 /**

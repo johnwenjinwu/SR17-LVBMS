@@ -1,5 +1,5 @@
 Conversion Warnings Log
 
 
-MSG_ID: 666 	MSG_TYPE: S 	MSG_NAME: bms_message_1
-	SIG_NAME: LVBMS_Cell_0, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+MSG_ID: 669 	MSG_TYPE: S 	MSG_NAME: bms_message_4
+	SIG_NAME: LVBMS_Thermistor, STATUS: Invalid Max or Min value., ACTION: Value Set to default

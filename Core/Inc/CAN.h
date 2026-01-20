@@ -7,7 +7,12 @@
 
 extern CAN_HandleTypeDef hcan1;
 extern uint8_t cell_balance_reg;
-extern finite_state_machine_t finite_state_machine;
+extern batt_status_t batt_status;
+
+extern uint8_t time_since_balancing,
+	  time_since_fault,
+	  time_since_no_fault,time_since_fault_sec,
+	  time_since_charing;
 
 //create a lookup table struct for CAN id
 typedef struct can_id_lookup_t{

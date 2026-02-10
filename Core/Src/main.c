@@ -130,8 +130,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		  //If no faults and no discharging(6th bit VGOOD is don't care)
 		  if((batt_info.fault_info & ~mask_balance) == 0){
 			  if(batt_info.cell_volt_diff > 20){
-				  batt_status = batt_state_balancing;
-				  time_since_balancing_sec ++;
+//				  batt_status = batt_state_balancing;
+//				  time_since_balancing_sec ++;
 			  }
 			  else if(batt_info.cell_volt_diff < 10){
 				  batt_status = batt_state_standby;

@@ -26,6 +26,7 @@
   </Global_Configuration>
   <Module_Configuration>
     <CAN_Database_Files>
+      <FilePath>..\..\Pressure_Sensor\Pressure_Sensor\Pressure_Sensor.dbf</FilePath>
       <FilePath>SR17_LVBMS.dbf</FilePath>
     </CAN_Database_Files>
     <Bus_Statistics>
@@ -112,63 +113,81 @@
     <CAN_Signal_Watch>
       <Message>
         <Id>666</Id>
+        <Signal>LVBMS_Cell_0</Signal>
+        <Signal>LVBMS_Cell_2</Signal>
         <Signal>LVBMS_Cell_3</Signal>
         <Signal>LVBMS_Cell_1</Signal>
-        <Signal>LVBMS_Cell_2</Signal>
+      </Message>
+      <Message>
+        <Id>666</Id>
         <Signal>LVBMS_Cell_0</Signal>
+        <Signal>LVBMS_Cell_2</Signal>
+        <Signal>LVBMS_Cell_3</Signal>
+        <Signal>LVBMS_Cell_1</Signal>
       </Message>
       <Message>
         <Id>667</Id>
         <Signal>LVBMS_Cell_lowest</Signal>
+        <Signal>LVBMS_Cell_4</Signal>
         <Signal>LVBMS_Cell_5</Signal>
         <Signal>LVBMS_Cell_highest</Signal>
-        <Signal>LVBMS_Cell_4</Signal>
       </Message>
       <Message>
         <Id>668</Id>
-        <Signal>LVBMS_Cell_avg</Signal>
         <Signal>LVBMS_Cell_diff</Signal>
-        <Signal>LVBMS_batt_volt</Signal>
         <Signal>LVBMS_current</Signal>
+        <Signal>LVBMS_Cell_avg</Signal>
+        <Signal>LVBMS_batt_volt</Signal>
+      </Message>
+      <Message>
+        <Id>666</Id>
+        <Signal>LVBMS_Cell_0</Signal>
+        <Signal>LVBMS_Cell_2</Signal>
+        <Signal>LVBMS_Cell_3</Signal>
+        <Signal>LVBMS_Cell_1</Signal>
       </Message>
       <Message>
         <Id>669</Id>
+        <Signal>LVBMS_Status_Under_Voltage</Signal>
+        <Signal>LVBMS_Status_Over_Voltage</Signal>
+        <Signal>LVBMS_Status_Over_Temp</Signal>
+        <Signal>LVBMS_Status_Power_Good</Signal>
+        <Signal>LVBMS_Status_Discharging</Signal>
+        <Signal>LVBMS_Status_Charging</Signal>
         <Signal>LVBMS_Thermistor</Signal>
-        <Signal>LVBMS_Over_Load</Signal>
-        <Signal>LVBMS_Short_Circuit</Signal>
-        <Signal>LVBMS_xxx</Signal>
-        <Signal>LVBMS_batt_state_discharging</Signal>
-        <Signal>LVBMS_batt_state_charging_and_balancing</Signal>
-        <Signal>LVBMS_xx</Signal>
-        <Signal>LVBMS_batt_state_balancing</Signal>
-        <Signal>LVBMS_batt_state_charing</Signal>
-        <Signal>LVBMS_batt_state_fault</Signal>
+        <Signal>LVBMS_Status_Short_Circuit</Signal>
+        <Signal>LVBMS_Status_Over_Load</Signal>
         <Signal>LVBMS_Balancing_Cell_3</Signal>
-        <Signal>LVBMS_Balancing_Cell_4</Signal>
-        <Signal>LVBMS_Charging</Signal>
-        <Signal>LVBMS_Over_Voltage</Signal>
-        <Signal>LVBMS_batt_state_standby</Signal>
-        <Signal>LVBMS_Balancing_Cell_0</Signal>
-        <Signal>LVBMS_Discharging</Signal>
-        <Signal>LVBMS_Balancing_Cell_1</Signal>
+        <Signal>LVBMS_time_since_balancing</Signal>
         <Signal>LVBMS_Balancing_Cell_5</Signal>
-        <Signal>LVBMS_Over_Temp</Signal>
-        <Signal>LVBMS_Under_Voltage</Signal>
-        <Signal>LVBMS_Power_Good</Signal>
+        <Signal>LVBMS_time_since_fault_sec</Signal>
+        <Signal>LVBMS_Balancing_Cell_4</Signal>
+        <Signal>LVBMS_Balancing_Cell_2</Signal>
+        <Signal>LVBMS_Balancing_Cell_1</Signal>
+        <Signal>LVBMS_time_since_fault</Signal>
+        <Signal>LVBMS_Balancing_Cell_0</Signal>
+        <Signal>LVBMS_batt_state_discharging</Signal>
+        <Signal>LVBMS_batt_state_charging</Signal>
+        <Signal>LVBMS_batt_state_standby</Signal>
+        <Signal>LVBMS_batt_xx</Signal>
+        <Signal>LVBMS_batt_state_balancing</Signal>
+        <Signal>LVBMS_batt_xxx</Signal>
+        <Signal>LVBMS_batt_state_fault</Signal>
+        <Signal>LVBMS_batt_state_charging_and_balancing</Signal>
       </Message>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
-        <Top>120</Top>
-        <Left>277</Left>
-        <Right>1240</Right>
-        <Bottom>743</Bottom>
+        <Top>103</Top>
+        <Left>108</Left>
+        <Right>1251</Right>
+        <Bottom>825</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
-        <MESSAGE_COLUMN>189</MESSAGE_COLUMN>
-        <Raw_Val_Column>189</Raw_Val_Column>
-        <Physical_Val_Column>378</Physical_Val_Column>
-        <Signal_Column>189</Signal_Column>
+        <MESSAGE_COLUMN>225</MESSAGE_COLUMN>
+        <Raw_Val_Column>225</Raw_Val_Column>
+        <Physical_Val_Column>450</Physical_Val_Column>
+        <Signal_Column>225</Signal_Column>
       </COLUMN_WIDTH>
     </CAN_Signal_Watch>
     <J1939_Signal_Watch>
@@ -304,37 +323,37 @@
       </COLUMN>
       <COLUMN>
         <ID>Time</ID>
-        <Order>2</Order>
+        <Order>7</Order>
         <IsVisible>1</IsVisible>
         <Width>95</Width>
       </COLUMN>
       <COLUMN>
         <ID>Tx/Rx</ID>
-        <Order>3</Order>
+        <Order>2</Order>
         <IsVisible>1</IsVisible>
         <Width>85</Width>
       </COLUMN>
       <COLUMN>
         <ID>Channel</ID>
-        <Order>4</Order>
+        <Order>3</Order>
         <IsVisible>1</IsVisible>
         <Width>92</Width>
       </COLUMN>
       <COLUMN>
         <ID>Msg Type</ID>
-        <Order>5</Order>
+        <Order>4</Order>
         <IsVisible>1</IsVisible>
         <Width>71</Width>
       </COLUMN>
       <COLUMN>
         <ID>ID</ID>
-        <Order>6</Order>
+        <Order>5</Order>
         <IsVisible>1</IsVisible>
         <Width>69</Width>
       </COLUMN>
       <COLUMN>
         <ID>Message</ID>
-        <Order>7</Order>
+        <Order>6</Order>
         <IsVisible>1</IsVisible>
         <Width>95</Width>
       </COLUMN>

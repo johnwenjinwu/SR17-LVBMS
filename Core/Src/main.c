@@ -213,22 +213,24 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  while(batt_status == batt_state_standby){
-		  //nihao fine shyt
-	  }
-	  while(batt_status == batt_state_charging){
-
-	  }
-	  while(batt_status == batt_state_discharging){
-
-	  }
+//	  while(batt_status == batt_state_standby){
+//		  //nihao fine shyt
+//	  }
+//	  while(batt_status == batt_state_charging){
+//
+//	  }
+//	  while(batt_status == batt_state_discharging){
+//
+//	  }
 	  while(batt_status == batt_state_fault){
+		  time_since_balancing_sec = 0;
 		  if(time_since_fault_sec == 59){
 			  time_since_fault_sec = 0;
 			  time_since_fault ++;
 		  }
 	  }
 	  while(batt_status == batt_state_charging_and_balancing){
+		  time_since_fault_sec = 0;
 		  bms_ic_balance_cells(&batt_info);
 		  if(time_since_balancing_sec == 59){
 			  time_since_balancing_sec = 0;
@@ -238,6 +240,13 @@ int main(void)
 	  }
 	  while(batt_status == batt_state_balancing){
 		  bms_ic_balance_cells(&batt_info);
+		  time_since_fault_sec = 0;
+		  bms_ic_balance_cells(&batt_info);
+		  if(time_since_balancing_sec == 59){
+			  time_since_balancing_sec = 0;
+			  time_since_balancing ++;
+			  time_since_charing ++;
+		  }
 	  }
 
 
